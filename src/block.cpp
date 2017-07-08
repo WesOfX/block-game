@@ -1,16 +1,17 @@
 #include "block.hpp"
 
-bool block_t::transparent() const{
-	switch(id){
-	case block_t::id_t::grass:
-		return false;
-	case block_t::id_t::dirt:
-		return false;
-	case block_t::id_t::stone:
-		return false;
-	case block_t::id_t::glass:
-		return true;
-	default:
-		return false;
-	}
+std::ostream& operator<<(
+	std::ostream& os, 
+	const block& b
+){
+	os << b.id;
+	return os;
+}
+
+std::istream& operator>>(
+	std::istream& is,
+	block& b
+){
+	b.id = (block::id_type)is.get();
+	return is;
 }

@@ -1,7 +1,13 @@
-#include "world.hpp"
+#include <iostream>
+#include "map.hpp"
 
-world_t world;
+map m;
 
 int main(){
-
+	m.chunks.emplace(
+		std::make_pair(
+			chunk::position_type{3, 1}, 
+			chunk()
+		)
+	);
 }

@@ -1,9 +1,23 @@
 #include "chunk.hpp"
 
-void chunk_t::update_blocks(){
-
+std::ostream& operator<<(
+	std::ostream& os, 
+	const chunk& c
+){
+	for(auto& layer: c.blocks)
+		for(auto& column: layer)
+			for(auto& block: column)
+				os << block;
+	return os;
 }
 
-void chunk_t::update_entities(){
-
+std::istream& operator>>(
+	std::istream& is,
+	chunk& c
+){
+	for(auto& layer: c.blocks)
+		for(auto& column: layer)
+			for(auto& block: column)
+				is >> block;
+	return is;
 }
