@@ -1,7 +1,12 @@
 #include <iostream>
 #include "map.hpp"
+#include "entity.hpp"
 
 map m;
+entity e{
+	{0.0f, 0.0f, 0.0f},
+	{0.0f, 0.0f, 0.0f}
+};
 
 int main(){
 	m.chunks.emplace(
@@ -10,4 +15,8 @@ int main(){
 			chunk()
 		)
 	);
+	
+	m.chunks.at({3, 1}).blocks[0][0][0].id = block::glass;
+	
+	m.save_chunk({3, 1});
 }

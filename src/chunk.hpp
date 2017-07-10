@@ -8,7 +8,7 @@
 struct chunk{
 	typedef vec2<int16_t> position_type;
 	static constexpr size_t rows = 16, columns = 16, layers = 256;
-	std::array<std::array<std::array<block, rows>, columns>, layers> blocks;
+	std::array<std::array<std::array<block, layers>, columns>, rows> blocks;
 };
 
 std::ostream& operator<<(

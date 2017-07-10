@@ -1,5 +1,8 @@
-run: src/main.cpp src/vector.hpp src/entity.hpp src/block.hpp src/chunk.hpp src/world.hpp
-	g++ -std=c++17 -Wall -g src/main.cpp -o run src/entity.cpp src/block.cpp src/chunk.cpp src/world.cpp
+run:
+	g++ -std=c++17 -Wall -g -O2 src/main.cpp -o run src/block.cpp src/chunk.cpp src/map.cpp src/entity.cpp
+	
+test:
+	g++ -std=c++17 -Wall -g -O2 src/test/chunk_imager.cpp -o chunk-imager src/test/ppm.cpp src/block.cpp src/chunk.cpp
 	
 clean:
-	rm ./run
+	rm ./run; rm ./chunk_imager.cpp

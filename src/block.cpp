@@ -4,7 +4,7 @@ std::ostream& operator<<(
 	std::ostream& os, 
 	const block& b
 ){
-	os << b.id;
+	os << (unsigned char)b.id;
 	return os;
 }
 
