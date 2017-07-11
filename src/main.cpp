@@ -1,22 +1,21 @@
 #include <iostream>
 #include "map.hpp"
 #include "entity.hpp"
+#include "generator.hpp"
 
 map m;
+chunk c;
 entity e{
 	{0.0f, 0.0f, 0.0f},
 	{0.0f, 0.0f, 0.0f}
 };
+generator g;
+chunk::position_type p{3, 1};
 
 int main(){
-	m.chunks.emplace(
-		std::make_pair(
-			chunk::position_type{3, 1}, 
-			chunk()
-		)
-	);
+	c = g(p);
+
+	m.chunks.insert({p, c});
 	
-	m.chunks.at({3, 1}).blocks[0][0][0].id = block::glass;
-	
-	m.save_chunk({3, 1});
+	m.save_chunk(p);
 }

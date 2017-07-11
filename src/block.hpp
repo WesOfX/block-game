@@ -4,6 +4,7 @@
 
 struct block{
 	enum id_type: uint8_t{
+		air,
 		grass,
 		dirt,
 		stone,

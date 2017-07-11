@@ -1,8 +1,8 @@
 run:
-	g++ -std=c++17 -Wall -g -O2 src/main.cpp -o run src/block.cpp src/chunk.cpp src/map.cpp src/entity.cpp
+	mkdir bin; mkdir -p data/world/chunks; g++ -std=c++17 -Wall -g -O2 src/main.cpp -o bin/run src/block.cpp src/chunk.cpp src/map.cpp src/entity.cpp src/generator.cpp
 	
 test:
-	g++ -std=c++17 -Wall -g -O2 src/test/chunk_imager.cpp -o chunk-imager src/test/ppm.cpp src/block.cpp src/chunk.cpp
+	mkdir bin; g++ -std=c++17 -Wall -g -O2 src/test/chunk_imager.cpp -o bin/chunk-imager src/test/ppm.cpp src/block.cpp src/chunk.cpp
 	
 clean:
-	rm ./run; rm ./chunk_imager.cpp
+	rm -r ./bin; rm -r ./data
