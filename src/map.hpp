@@ -7,7 +7,6 @@
 #include "util.hpp"
 
 struct map{
-	std::string name = "world";
 	std::unordered_map<chunk::position_type, chunk> chunks;
 	generator gen;
 	// std::unordered_map<chunk::position_type, std::string> saved_chunks;
@@ -17,7 +16,7 @@ struct map{
 	void load_chunk(const chunk::position_type& position);
 	
 	// saves a chunk to a file and unloads the chunk
-	void save_chunk(const chunk::position_type& position) const;
+	void save_chunk(const chunk::position_type& position);
 	
 	// saves all the loaded chunks and saves the map
 	// void save_map(const std::string& filename) const;

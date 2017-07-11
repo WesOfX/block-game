@@ -1,15 +1,8 @@
 #include <iostream>
-#include "map.hpp"
-#include "entity.hpp"
+#include "world.hpp"
 
-map m;
-entity e{
-	{0.0f, 0.0f, 0.0f},
-	{0.0f, 0.0f, 0.0f}
-};
-chunk::position_type p{3, 1};
+world w;
 
 int main(){	
-	m.load_chunk(p);	
-	m.save_chunk(p);
+	w.update();
 }

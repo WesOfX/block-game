@@ -18,11 +18,14 @@ void map::load_chunk(const chunk::position_type& position){
 	}
 }
 
-void map::save_chunk(const chunk::position_type& position) const{
+void map::save_chunk(const chunk::position_type& position){
 	auto filename = generate_filename(position);
+	if(chunks.find(position) == chunks.end())
+		throw std::runtime_error("Chunk does not exist: " + filename);
 	std::ofstream fout{filename, std::ios::binary};
 	if(fout) fout << chunks.at(position);
 	else throw std::runtime_error("Failed to save chunk: " + filename);
+	chunks.erase(position);
 }
 
 std::string map::generate_filename(const chunk::position_type& position) const{
