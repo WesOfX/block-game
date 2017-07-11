@@ -3,11 +3,19 @@
 
 void map::load_chunk(const chunk::position_type& position){
 	auto filename = generate_filename(position);
+	if(chunks.count(position) > 0)
+		throw std::runtime_error("Chunk already exists: " + filename);
 	std::ifstream fin{filename, std::ios::binary};
-	chunk c;
-	if(fin) fin >> c;
-	else throw std::runtime_error("Failed to load chunk: " + filename);
-	chunks.insert({position, c});
+	if(!fin)
+		// generate new chunk
+		chunks.emplace(std::make_pair(position, gen(position)));
+	else{
+		// load chunk from file
+		chunk c;
+		if(fin) fin >> c;
+		else throw std::runtime_error("Failed to load chunk: " + filename);
+		chunks.insert({position, c});
+	}
 }
 
 void map::save_chunk(const chunk::position_type& position) const{

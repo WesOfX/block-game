@@ -3,15 +3,17 @@
 #include <string>
 #include <unordered_map>
 #include "chunk.hpp"
+#include "generator.hpp"
 #include "util.hpp"
 
 struct map{
 	std::string name = "world";
 	std::unordered_map<chunk::position_type, chunk> chunks;
+	generator gen;
 	// std::unordered_map<chunk::position_type, std::string> saved_chunks;
 	
 	// loads a chunk if it is saved
-	// generates a chunk if it is not saved
+	// generates a new chunk if it is not
 	void load_chunk(const chunk::position_type& position);
 	
 	// saves a chunk to a file and unloads the chunk
