@@ -1,30 +1,42 @@
 #include <fstream>
 #include "map.hpp"
 
+map::~map(){
+	for(auto& i: chunks) save_chunk(i.first);
+}
+
 void map::load_chunk(const chunk::position_type& position){
+	// If the chunk is already loaded
+	if(chunks.count(position) > 0) return;
+	
 	auto filename = generate_filename(position);
-	if(chunks.count(position) > 0)
-		throw std::runtime_error("Chunk already exists: " + filename);
 	std::ifstream fin{filename, std::ios::binary};
-	if(!fin)
-		// generate new chunk
-		chunks.emplace(std::make_pair(position, gen(position)));
-	else{
+	// If the file is good and it's not empty
+	if(fin && fin.peek() != std::ifstream::traits_type::eof()){
 		// load chunk from file
 		chunk c;
-		if(fin) fin >> c;
-		else throw std::runtime_error("Failed to load chunk: " + filename);
+		fin >> c;
 		chunks.insert({position, c});
+	}
+	else{
+		// generate new chunk
+		chunks.emplace(position, gen(position));
 	}
 }
 
 void map::save_chunk(const chunk::position_type& position){
+	// If the chunk doesn't exist
+	if(chunks.find(position) == chunks.end()) return;
+	
 	auto filename = generate_filename(position);
-	if(chunks.find(position) == chunks.end())
-		throw std::runtime_error("Chunk does not exist: " + filename);
 	std::ofstream fout{filename, std::ios::binary};
 	if(fout) fout << chunks.at(position);
-	else throw std::runtime_error("Failed to save chunk: " + filename);
+	else throw std::runtime_error(
+		"Failed to save chunk "
+	  + std::to_string(position.x)
+	  + ", "
+	  + std::to_string(position.y)
+	);
 	chunks.erase(position);
 }
 

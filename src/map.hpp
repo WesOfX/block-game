@@ -7,6 +7,8 @@
 #include "util.hpp"
 
 struct map{
+	~map();
+
 	std::unordered_map<chunk::position_type, chunk> chunks;
 	generator gen;
 	// std::unordered_map<chunk::position_type, std::string> saved_chunks;

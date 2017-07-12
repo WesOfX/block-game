@@ -1,5 +1,19 @@
 #include "world.hpp"
 
+world::~world(){
+	chunk_loader.join();
+}
+
 void world::update(){
-	// determin which chunks to load/save based on player positions
+	// std::vector<std::thread> chunk_loading_threads;
+	for(auto& i: players){
+		chunk_loader = std::thread(
+			&map::load_chunk,
+			&m,
+			chunk::position_type{
+				(chunk::position_type::coordinate_type)(i.position.x / chunk::columns),
+				(chunk::position_type::coordinate_type)(i.position.y / chunk::rows)
+			}
+		);
+	}
 }
