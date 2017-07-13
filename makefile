@@ -39,6 +39,6 @@ obj:
 	mkdir obj
 
 clean:
+	rm -r bin
 	rm -r data
 	rm -r obj
-	rm -r bin
