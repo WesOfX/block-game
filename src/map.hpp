@@ -20,6 +20,10 @@ struct map{
 	// saves a chunk to a file and unloads the chunk
 	void save_chunk(const chunk::position_type& position);
 	
+	void unload_chunk(const chunk::position_type& position);
+	
+	void save();
+	
 	// saves all the loaded chunks and saves the map
 	// void save_map(const std::string& filename) const;
 	

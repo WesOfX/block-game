@@ -2,7 +2,7 @@
 #include "map.hpp"
 
 map::~map(){
-	for(auto& i: chunks) save_chunk(i.first);
+	save();
 }
 
 void map::load_chunk(const chunk::position_type& position){
@@ -37,7 +37,14 @@ void map::save_chunk(const chunk::position_type& position){
 	  + ", "
 	  + std::to_string(position.y)
 	);
+}
+
+void map::unload_chunk(const chunk::position_type& position){
 	chunks.erase(position);
+}
+
+void map::save(){
+	for(auto& i: chunks) save_chunk(i.first);
 }
 
 std::string map::generate_filename(const chunk::position_type& position) const{
