@@ -11,7 +11,10 @@ struct block{
 		glass
 	};
 	
-	id_type id;
+	id_type id = air;
+	
+	bool visible() const;
+	bool transparent() const;
 };
 
 std::ostream& operator<<(
