@@ -6,6 +6,7 @@
 #include <SFML/OpenGL.hpp>
 #include "../modeler.hpp"
 #include "../generator.hpp"
+#include "../vbo.hpp"
 
 sf::RenderWindow window{
 	sf::VideoMode(800, 600),
@@ -17,14 +18,40 @@ chunk c;
 generator gen;
 model cm;
 
+using namespace std::chrono;
+steady_clock::time_point start, end;
+
 int main(){
+	
+	start = steady_clock::now();
 	c = gen({0, 0});
-	std::cout << "generated" << std::endl;
-	auto start = std::chrono::steady_clock::now();
+	end = steady_clock::now();
+	std::cout 
+ << "Chunk generated in " 
+ << duration<float>(end - start).count()
+ << "seconds" 
+ << std::endl;
+ 
+ 	std::cout
+ << "Number of blocks: "
+ << chunk::rows * chunk::columns * chunk::layers
+ << std::endl;
+	
+	start = steady_clock::now();
 	cm = m.generate_chunk_model(c);
-	auto end = std::chrono::steady_clock::now();
-	std::cout << "modeled in " << std::chrono::duration<float>(end - start).count() << "seconds" << std::endl;
-	std::cout << "vertices: " << cm.size() << std::endl;
+	end = steady_clock::now();
+	std::cout 
+ << "Chunk modeled generated in " 
+ << duration<float>(end - start).count() 
+ << " seconds" 
+ << std::endl;
+ 
+	std::cout 
+ << "Number of vertices: " 
+ << cm.vertices.size() 
+ << std::endl;
+ 
+ 	model::bind(cm);
 	
 	bool running = true;
 	while(running){

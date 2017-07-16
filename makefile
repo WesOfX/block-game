@@ -1,15 +1,15 @@
 CC= g++
 CFLAGS= -std=c++17 -Wall -g -O2
-LDFLAGS= -lpthread -sfml-graphics -sfml-window -sfml-system
-OBJS= obj/world.o obj/entity.o obj/map.o obj/chunk.o obj/block.o obj/generator.o obj/scene.o obj/modeler.o
+LDFLAGS= -lpthread -lGLEW -lGLU -lGL -lsfml-graphics -lsfml-window -lsfml-system
+OBJS= obj/world.o obj/entity.o obj/map.o obj/chunk.o obj/block.o obj/generator.o obj/scene.o obj/modeler.o obj/vbo.o
 
 all: bin/run bin/chunk-viewer
 
 bin/run: obj/main.o $(OBJS) | bin data
-	$(CC) $(CFLAGS) -o bin/run obj/main.o $(OBJS) -lpthread
+	$(CC) $(CFLAGS) -o bin/run obj/main.o $(OBJS) $(LDFLAGS)
 	
 bin/chunk-viewer: obj/chunk_viewer.o $(OBJS) | bin
-	$(CC) $(CFLAGS) -o bin/chunk-viewer obj/chunk_viewer.o $(OBJS) -lpthread -lsfml-graphics -lsfml-window -lsfml-system
+	$(CC) $(CFLAGS) -o bin/chunk-viewer obj/chunk_viewer.o $(OBJS) $(LDFLAGS)
 
 obj/main.o: src/main.cpp | obj
 	$(CC) $(CFLAGS) -o obj/main.o -c src/main.cpp
@@ -32,11 +32,14 @@ obj/block.o: src/block.hpp src/block.cpp | obj
 obj/generator.o: src/generator.hpp src/generator.cpp src/noise.hpp obj/chunk.o | obj
 	$(CC) $(CFLAGS) -o obj/generator.o -c src/generator.cpp
 
-obj/chunk_viewer.o: src/test/chunk_viewer.cpp obj/scene.o | obj
+obj/chunk_viewer.o: src/test/chunk_viewer.cpp obj/modeler.o obj/generator.o obj/vbo.o | obj
 	$(CC) $(CFLAGS) -o obj/chunk_viewer.o -c src/test/chunk_viewer.cpp
 	
 obj/scene.o: src/scene.hpp src/scene.cpp obj/modeler.o | obj
 	$(CC) $(CFLAGS) -o obj/scene.o -c src/scene.cpp
+	
+obj/vbo.o: src/vbo.hpp src/vbo.cpp obj/modeler.o | obj
+	$(CC) $(CFLAGS) -o obj/vbo.o -c src/vbo.cpp
 	
 obj/modeler.o: src/modeler.hpp src/modeler.cpp obj/chunk.o | obj
 	$(CC) $(CFLAGS) -o obj/modeler.o -c src/modeler.cpp
