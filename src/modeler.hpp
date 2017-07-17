@@ -7,7 +7,6 @@
 
 struct model{
 	std::vector<vertex> vertices;
-	static void bind(const model& m);
 };
 
 typedef std::array<vertex, 4> quad;

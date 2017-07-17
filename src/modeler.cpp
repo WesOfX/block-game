@@ -105,50 +105,51 @@ quad modeler::generate_block_face(
 		q[1].position = {1.0f, 1.0f, 1.0f};		
 		q[2].position = {1.0f, 1.0f, 0.0f};
 		q[3].position = {0.0f, 1.0f, 0.0f};
+		for(auto& i: q) i.color = {1.0f, 1.0f, 1.0f};
 		break;
 	case bottom:
 		q[0].position = {0.0f, 1.0f, 0.0f};
 		q[1].position = {1.0f, 1.0f, 0.0f};		
 		q[2].position = {1.0f, 1.0f, 1.0f};
 		q[3].position = {0.0f, 1.0f, 1.0f};
+		for(auto& i: q) i.color = {0.5f, 0.5f, 0.5f};
 		break;
 	case front:
 		q[0].position = {0.0f, 0.0f, 1.0f};
 		q[1].position = {1.0f, 0.0f, 1.0f};		
 		q[2].position = {1.0f, 1.0f, 1.0f};
 		q[3].position = {0.0f, 1.0f, 1.0f};
+		for(auto& i: q) i.color = {0.83f, 0.83f, 0.83f};
 		break;
 	case back:
 		q[0].position = {1.0f, 0.0f, 0.0f};
 		q[1].position = {0.0f, 0.0f, 0.0f};		
 		q[2].position = {0.0f, 1.0f, 0.0f};
 		q[3].position = {1.0f, 1.0f, 0.0f};
+		for(auto& i: q) i.color = {0.83f, 0.83f, 0.83f};
 		break;
 	case left:
 		q[0].position = {0.0f, 0.0f, 0.0f};
 		q[1].position = {0.0f, 0.0f, 1.0f};		
 		q[2].position = {0.0f, 1.0f, 1.0f};
 		q[3].position = {0.0f, 1.0f, 0.0f};
+		for(auto& i: q) i.color = {0.66f, 0.66f, 0.66f};
 		break;
 	case right:
 		q[0].position = {1.0f, 0.0f, 1.0f};
 		q[1].position = {1.0f, 0.0f, 0.0f};		
 		q[2].position = {1.0f, 1.0f, 0.0f};
 		q[3].position = {1.0f, 1.0f, 1.0f};
+		for(auto& i: q) i.color = {0.66f, 0.66f, 0.66f};
 		break;
 	}
 	typedef decltype(decltype(q)::value_type::position) position_type;
 	typedef position_type::coordinate_type coordinate_type;
-	q[0].position += position_type{
+	for(auto& i: q) i.position += position_type{
 		(coordinate_type)position.x,
 		(coordinate_type)position.y,
 		(coordinate_type)position.z
 	};
-	q[0].color = {1.0f, 1.0f, 1.0f};
-	q[0].uv = {0.0f, 0.0f};
+	for(auto& i: q) i.uv = {0.0f, 0.0f};
 	return q;
-}
-
-void model::bind(const model& m){
-	
 }

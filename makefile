@@ -1,7 +1,7 @@
 CC= g++
 CFLAGS= -std=c++17 -Wall -g -O2
 LDFLAGS= -lpthread -lGLEW -lGLU -lGL -lsfml-graphics -lsfml-window -lsfml-system
-OBJS= obj/world.o obj/entity.o obj/map.o obj/chunk.o obj/block.o obj/generator.o obj/scene.o obj/modeler.o obj/vbo.o
+OBJS= obj/world.o obj/entity.o obj/map.o obj/chunk.o obj/block.o obj/generator.o obj/scene.o obj/modeler.o obj/vbo.o obj/vao.o
 
 all: bin/run bin/chunk-viewer
 
@@ -40,6 +40,9 @@ obj/scene.o: src/scene.hpp src/scene.cpp obj/modeler.o | obj
 	
 obj/vbo.o: src/vbo.hpp src/vbo.cpp obj/modeler.o | obj
 	$(CC) $(CFLAGS) -o obj/vbo.o -c src/vbo.cpp
+	
+obj/vao.o: src/vao.hpp src/vao.cpp | obj
+	$(CC) $(CFLAGS) -o obj/vao.o -c src/vao.cpp
 	
 obj/modeler.o: src/modeler.hpp src/modeler.cpp obj/chunk.o | obj
 	$(CC) $(CFLAGS) -o obj/modeler.o -c src/modeler.cpp

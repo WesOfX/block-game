@@ -1,5 +1,6 @@
 #pragma once
 
+#include <glm/glm.hpp>
 #include "chunk.hpp"
 
 // std::hash for chunk positions used for std::unordered_map
@@ -13,3 +14,16 @@ struct std::hash<chunk::position_type>{
 		return x_hash ^ (y_hash << 1);
 	}
 };
+
+// TODO
+/*
+sf::Glsl::Mat4 camera(const vec3& position, float yaw, float pitch){
+	glm::mat4 projection = glm::perspective(
+		glm::radians(30.0f),
+		4.0f / 3.0f,
+		0.1f,
+		100.0f
+	);
+	return {};
+}
+*/
