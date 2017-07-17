@@ -10,11 +10,6 @@
 #include "../vbo.hpp"
 #include "../vao.hpp"
 
-sf::RenderWindow window{
-	sf::VideoMode(900, 900),
-	"Block Game"
-};
-
 modeler m;
 chunk c;
 generator gen;
@@ -26,8 +21,27 @@ using namespace std::chrono;
 steady_clock::time_point start, end;
 
 int main(){
+	// Open window
+	sf::RenderWindow window(
+		sf::VideoMode(800, 600), 
+		"Block Game",
+		sf::Style::Default,
+		sf::ContextSettings(
+			24,
+			8,
+			8,
+			4,
+			3
+		)
+	);	
+
+	window.setVerticalSyncEnabled(true);
+	window.setActive(true);
+
 	glewInit();
 	
+	// glEnable(GL_CULL_FACE);
+	// glDepthMask(GL_TRUE);
 	glEnable(GL_DEPTH_TEST);
 	glDepthFunc(GL_LESS);
 	
@@ -67,6 +81,8 @@ int main(){
  
  	va.load();
  	vb.load_from_model(cm, vbo::static_draw);
+ 	
+ 	glm::vec3 camera_position{18.0f, 8.0f, 18.0f};
 	
 	bool running = true;
 	while(running){
@@ -75,23 +91,45 @@ int main(){
 			switch(e.type){
 			case sf::Event::Closed:
 				running = false;
+			case sf::Event::KeyPressed:
+				switch(e.key.code){
+				case sf::Keyboard::A:
+					camera_position.x++;
+					break;
+				case sf::Keyboard::E:
+					camera_position.x--;
+					break;
+				case sf::Keyboard::Comma:
+					camera_position.z++;
+					break;
+				case sf::Keyboard::O:
+					camera_position.z--;
+					break;
+				case sf::Keyboard::LShift:
+					camera_position.y--;
+					break;
+				case sf::Keyboard::Space:
+					camera_position.y++;
+					break;
+				default:
+					break;
+				}
+				break;
 			default:
 				break;
 			}
 		}
 		
-		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-		
 		// Make matrix for triangle
 		glm::mat4 projection = glm::perspective(
 			glm::radians(90.0f), 
-			1.0f / 1.0f, 
+			4.0f / 3.0f, 
 			0.1f, 
-			1000.0f
+			100.0f
 		);
 		
 		glm::mat4 view = glm::lookAt(
-			glm::vec3(18, 8, 18),
+			camera_position,
 			glm::vec3(8.0f, 8.0f, 8.0f),
 			glm::vec3(0, 1, 0)
 		);
@@ -128,6 +166,7 @@ int main(){
 		
 		sf::Shader::bind(&shader);
 		va.bind();
+		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 		glDrawArrays(GL_QUADS, 0, vb.vertex_count);
 		window.display();
 	}

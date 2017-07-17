@@ -69,7 +69,7 @@ model modeler::generate_chunk_model(
 					 	 && c.blocks[row - 1][column][layer].transparent()
 					 	)
 					){
-						q = generate_block_face(id, position, front);
+						q = generate_block_face(id, position, back);
 						m.vertices.insert(m.vertices.end(), q.begin(), q.end());
 					}
 					if(
@@ -83,7 +83,7 @@ model modeler::generate_chunk_model(
 					 	 && c.blocks[row + 1][column][layer].transparent()
 					 	)
 					){
-						q = generate_block_face(id, position, back);
+						q = generate_block_face(id, position, front);
 						m.vertices.insert(m.vertices.end(), q.begin(), q.end());
 					}
 				}
@@ -108,10 +108,10 @@ quad modeler::generate_block_face(
 		for(auto& i: q) i.color = {1.0f, 1.0f, 1.0f};
 		break;
 	case bottom:
-		q[0].position = {0.0f, 1.0f, 0.0f};
-		q[1].position = {1.0f, 1.0f, 0.0f};		
-		q[2].position = {1.0f, 1.0f, 1.0f};
-		q[3].position = {0.0f, 1.0f, 1.0f};
+		q[0].position = {0.0f, 0.0f, 0.0f};
+		q[1].position = {1.0f, 0.0f, 0.0f};		
+		q[2].position = {1.0f, 0.0f, 1.0f};
+		q[3].position = {0.0f, 0.0f, 1.0f};
 		for(auto& i: q) i.color = {0.5f, 0.5f, 0.5f};
 		break;
 	case front:
@@ -146,9 +146,9 @@ quad modeler::generate_block_face(
 	typedef decltype(decltype(q)::value_type::position) position_type;
 	typedef position_type::coordinate_type coordinate_type;
 	for(auto& i: q) i.position += position_type{
-		(coordinate_type)position.x,
-		(coordinate_type)position.y,
-		(coordinate_type)position.z
+		(coordinate_type)position.y, // column
+		(coordinate_type)position.z, // layer
+		(coordinate_type)position.x  // row
 	};
 	for(auto& i: q) i.uv = {0.0f, 0.0f};
 	return q;
