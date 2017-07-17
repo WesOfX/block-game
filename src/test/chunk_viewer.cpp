@@ -35,12 +35,14 @@ int main(){
 		)
 	);	
 
+	window.setKeyRepeatEnabled(false);
 	window.setVerticalSyncEnabled(true);
 	window.setActive(true);
 
 	glewInit();
 	
-	// glEnable(GL_CULL_FACE);
+	glEnable(GL_CULL_FACE);
+	glCullFace(GL_BACK);
 	// glDepthMask(GL_TRUE);
 	glEnable(GL_DEPTH_TEST);
 	glDepthFunc(GL_LESS);
@@ -82,7 +84,12 @@ int main(){
  	va.load();
  	vb.load_from_model(cm, vbo::static_draw);
  	
- 	glm::vec3 camera_position{18.0f, 8.0f, 18.0f};
+ 	glm::vec3 camera_position{18.0f, 8.0f, 18.0f},
+ 	          camera_velocity{0.0f, 0.0f, 0.0f};
+ 	          
+ 	float camera_speed = 15.0f;
+ 	
+ 	sf::Clock clock;
 	
 	bool running = true;
 	while(running){
@@ -94,22 +101,46 @@ int main(){
 			case sf::Event::KeyPressed:
 				switch(e.key.code){
 				case sf::Keyboard::A:
-					camera_position.x++;
+					camera_velocity.x += camera_speed;
 					break;
 				case sf::Keyboard::E:
-					camera_position.x--;
+					camera_velocity.x -= camera_speed;
 					break;
 				case sf::Keyboard::Comma:
-					camera_position.z++;
+					camera_velocity.z += camera_speed;
 					break;
 				case sf::Keyboard::O:
-					camera_position.z--;
+					camera_velocity.z -= camera_speed;
 					break;
 				case sf::Keyboard::LShift:
-					camera_position.y--;
+					camera_velocity.y -= camera_speed;
 					break;
 				case sf::Keyboard::Space:
-					camera_position.y++;
+					camera_velocity.y += camera_speed;
+					break;
+				default:
+					break;
+				}
+				break;
+			case sf::Event::KeyReleased:
+				switch(e.key.code){
+				case sf::Keyboard::A:
+					camera_velocity.x -= camera_speed;
+					break;
+				case sf::Keyboard::E:
+					camera_velocity.x += camera_speed;
+					break;
+				case sf::Keyboard::Comma:
+					camera_velocity.z -= camera_speed;
+					break;
+				case sf::Keyboard::O:
+					camera_velocity.z += camera_speed;
+					break;
+				case sf::Keyboard::LShift:
+					camera_velocity.y += camera_speed;
+					break;
+				case sf::Keyboard::Space:
+					camera_velocity.y -= camera_speed;
 					break;
 				default:
 					break;
@@ -120,17 +151,20 @@ int main(){
 			}
 		}
 		
+		camera_position += camera_velocity * clock.getElapsedTime().asSeconds();
+		clock.restart();
+		
 		// Make matrix for triangle
 		glm::mat4 projection = glm::perspective(
 			glm::radians(90.0f), 
 			4.0f / 3.0f, 
 			0.1f, 
-			100.0f
+			1000.0f
 		);
 		
 		glm::mat4 view = glm::lookAt(
 			camera_position,
-			glm::vec3(8.0f, 8.0f, 8.0f),
+			glm::vec3(16.0f, 16.0f, 16.0f),
 			glm::vec3(0, 1, 0)
 		);
 		
