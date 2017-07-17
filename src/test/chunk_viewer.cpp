@@ -9,6 +9,7 @@
 #include "../generator.hpp"
 #include "../vbo.hpp"
 #include "../vao.hpp"
+#include "../atlas.hpp"
 
 modeler m;
 chunk c;
@@ -16,6 +17,7 @@ generator gen;
 model cm;
 vbo vb;
 vao va;
+atlas at;
 
 using namespace std::chrono;
 steady_clock::time_point start, end;
