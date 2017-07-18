@@ -1,10 +1,14 @@
 #pragma once
 
+#include <array>
 #include <SFML/Graphics/Texture.hpp>
 #include "vec2.hpp"
 
+typedef std::array<vec2<float>, 4> uv_quad;
+
 struct atlas{
-	static constexpr size_t rows = 16, columns = 16;
+	size_t rows, columns;
+	static constexpr float border = 0.0f, pixel_offset = 0.0f;
 	sf::Texture texture;
-	vec2<float> get_uv(size_t row, size_t column) const;
+	uv_quad get_uv(const vec2<size_t>& position) const;
 };

@@ -17,7 +17,7 @@ generator gen;
 model cm;
 vbo vb;
 vao va;
-atlas at;
+// atlas at;
 
 using namespace std::chrono;
 steady_clock::time_point start, end;
@@ -25,14 +25,14 @@ steady_clock::time_point start, end;
 int main(){
 	// Open window
 	sf::RenderWindow window(
-		sf::VideoMode(800, 600), 
+		sf::VideoMode(1920, 1080), 
 		"Block Game",
 		sf::Style::Default,
 		sf::ContextSettings(
 			24,
 			8,
 			8,
-			4,
+			1,
 			3
 		)
 	);	
@@ -55,7 +55,7 @@ int main(){
 	std::cout 
  << "Chunk generated in " 
  << duration<float>(end - start).count()
- << "seconds" 
+ << " seconds" 
  << std::endl;
  
  	std::cout
@@ -76,7 +76,11 @@ int main(){
  << "Number of vertices: " 
  << cm.vertices.size() 
  << std::endl;
- 
+
+	/*at.rows = 16;
+	at.columns = 16;
+	at.texture.loadFromFile("textures/blocks.png");*/
+	 
  	sf::Shader shader;
  	shader.loadFromFile(
  		"shaders/vertex_shader", 
@@ -85,11 +89,21 @@ int main(){
  
  	va.load();
  	vb.load_from_model(cm, vbo::static_draw);
+	/*
+	// When MAGnifying the image (no bigger mipmap available), use LINEAR filtering
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+	// When MINifying the image, use a LINEAR blend of two mipmaps, each filtered LINEARLY too
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_NEAREST);
+	// 
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAX_LEVEL, 4);
+	// Generate mipmaps, by the way.
+	glGenerateMipmap(GL_TEXTURE_2D);
+	*/
  	
  	glm::vec3 camera_position{18.0f, 8.0f, 18.0f},
  	          camera_velocity{0.0f, 0.0f, 0.0f};
  	          
- 	float camera_speed = 15.0f;
+ 	float camera_speed = 16.0f;
  	
  	sf::Clock clock;
 	
@@ -158,8 +172,8 @@ int main(){
 		
 		// Make matrix for triangle
 		glm::mat4 projection = glm::perspective(
-			glm::radians(90.0f), 
-			4.0f / 3.0f, 
+			glm::radians(60.0f), 
+			16.0f / 9.0f, 
 			0.1f, 
 			1000.0f
 		);
@@ -200,6 +214,8 @@ int main(){
 			)
 		);
 		
+		// sf::Texture::bind(&at.texture);
+		sf::Texture::bind(&m.block_atlas.texture);
 		sf::Shader::bind(&shader);
 		va.bind();
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);

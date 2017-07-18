@@ -4,6 +4,7 @@
 #include <optional>
 #include "vertex.hpp"
 #include "chunk.hpp"
+#include "atlas.hpp"
 
 struct model{
 	std::vector<vertex> vertices;
@@ -20,6 +21,8 @@ struct modeler{
 		left,
 		right
 	};
+	atlas block_atlas;
+	modeler();
 	model generate_chunk_model(
 		const chunk& c,
 		const std::optional<chunk>& north_chunk = {},
@@ -32,4 +35,8 @@ struct modeler{
 		const chunk::block_position_type& position, 
 		block_face face
 	) const;
+	static vec2<size_t> atlas_position(
+		block::id_type id, 
+		block_face face
+	);
 };

@@ -12,7 +12,7 @@ chunk generator::operator()(const chunk::position_type& position){
 					(float)layer / 6
 				);
 				// c.blocks[row][column][layer].id = block::stone;
-				if(value > 0.2f) c.blocks[row][column][layer].id = block::stone;
+				if(value > 0.0f) c.blocks[row][column][layer].id = block::grass;
 				// else c.blocks[row][column][0].id = block::stone;
 			}
 		}

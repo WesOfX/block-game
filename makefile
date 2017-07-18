@@ -44,7 +44,7 @@ obj/vbo.o: src/vbo.hpp src/vbo.cpp obj/modeler.o | obj
 obj/vao.o: src/vao.hpp src/vao.cpp | obj
 	$(CC) $(CFLAGS) -o obj/vao.o -c src/vao.cpp
 	
-obj/modeler.o: src/modeler.hpp src/modeler.cpp obj/chunk.o | obj
+obj/modeler.o: src/modeler.hpp src/modeler.cpp obj/chunk.o obj/atlas.o | obj
 	$(CC) $(CFLAGS) -o obj/modeler.o -c src/modeler.cpp
 	
 obj/atlas.o: src/atlas.hpp src/atlas.cpp | obj

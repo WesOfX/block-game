@@ -1,5 +1,14 @@
 #include "modeler.hpp"
 
+modeler::modeler(){
+	block_atlas.rows = 16;
+	block_atlas.columns = 16;
+	block_atlas.texture.loadFromFile("textures/blocks.png");
+	block_atlas.texture.setSmooth(false);
+	block_atlas.texture.setRepeated(false);
+	//block_atlas.texture.generateMipmap();
+}
+
 model modeler::generate_chunk_model(
 	const chunk& c,
 	const std::optional<chunk>& north_chunk,
@@ -150,6 +159,22 @@ quad modeler::generate_block_face(
 		(coordinate_type)position.z, // layer
 		(coordinate_type)position.x  // row
 	};
-	for(auto& i: q) i.uv = {0.0f, 0.0f};
+	auto uv_q{block_atlas.get_uv(atlas_position(id, face))};
+	for(auto i = 0; i < 4; ++i) q[i].uv = uv_q[i];
 	return q;
+}
+
+vec2<size_t> modeler::atlas_position(
+	block::id_type id,
+	block_face face
+){
+	switch(id){
+	case block::grass:
+		switch(face){
+		case top: return {0, 0};
+		case bottom: return {2, 0};
+		default: return {1, 0};
+		}
+	default: return {};
+	}
 }
