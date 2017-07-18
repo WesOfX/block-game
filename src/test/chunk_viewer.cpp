@@ -10,14 +10,7 @@
 #include "../vbo.hpp"
 #include "../vao.hpp"
 #include "../atlas.hpp"
-
-modeler m;
-chunk c;
-generator gen;
-model cm;
-vbo vb;
-vao va;
-// atlas at;
+#include "../shader.hpp"
 
 using namespace std::chrono;
 steady_clock::time_point start, end;
@@ -48,6 +41,14 @@ int main(){
 	// glDepthMask(GL_TRUE);
 	glEnable(GL_DEPTH_TEST);
 	glDepthFunc(GL_LESS);
+	
+	modeler m;
+	chunk c;
+	generator gen;
+	model cm;
+	vbo vb;
+	vao va;
+	// atlas at;
 	
 	start = steady_clock::now();
 	c = gen({0, 0});
@@ -81,11 +82,18 @@ int main(){
 	at.columns = 16;
 	at.texture.loadFromFile("textures/blocks.png");*/
 	 
- 	sf::Shader shader;
+ 	/*sf::Shader shader;
  	shader.loadFromFile(
  		"shaders/vertex_shader", 
  		"shaders/fragment_shader"
- 	);
+ 	);*/
+ 	
+ 	shader s{
+ 		"shaders/vertex_shader",
+ 		"shaders/fragment_shader"
+ 	};
+ 	
+ 	GLuint mvp_id{glGetUniformLocation(s.get_id(), "mvp")};
  
  	va.load();
  	vb.load_from_model(cm, vbo::static_draw);
@@ -99,6 +107,11 @@ int main(){
 	// Generate mipmaps, by the way.
 	glGenerateMipmap(GL_TEXTURE_2D);
 	*/
+ 	
+ 	// TODO make OOP
+ 	/*GLuint sampler;
+ 	glGenSamplers(1, &sampler);*/
+
  	
  	glm::vec3 camera_position{18.0f, 8.0f, 18.0f},
  	          camera_velocity{0.0f, 0.0f, 0.0f};
@@ -188,7 +201,7 @@ int main(){
 		
 		glm::mat4 mvp = projection * view * model;
 		
-		float matrix[16] = {
+		/*float matrix[16] = {
 			mvp[0][0],
 			mvp[0][1],
 			mvp[0][2],
@@ -205,7 +218,9 @@ int main(){
 			mvp[3][1],
 			mvp[3][2],
 			mvp[3][3],
-		};
+		};*/
+		
+		/*sf::Shader::bind(&shader);
 		
 		shader.setUniform(
 			"mvp", 
@@ -214,9 +229,22 @@ int main(){
 			)
 		);
 		
+		shader.setUniform(
+			"sampler",
+			sf::Glsl::Vec4()
+		);*/
+		
+		// glBindSampler(0, sampler);
+		
+		// TODO make uniform OOP
+		glUniformMatrix4fv(mvp_id, 1, GL_FALSE, &mvp[0][0]);
+		
+		s.bind();
+		
+		m.block_atlas.bind();
+		
 		// sf::Texture::bind(&at.texture);
-		sf::Texture::bind(&m.block_atlas.texture);
-		sf::Shader::bind(&shader);
+		// sf::Texture::bind(&m.block_atlas.texture);
 		va.bind();
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 		glDrawArrays(GL_QUADS, 0, vb.vertex_count);

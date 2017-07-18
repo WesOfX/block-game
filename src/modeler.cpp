@@ -1,11 +1,14 @@
 #include "modeler.hpp"
 
-modeler::modeler(){
-	block_atlas.rows = 16;
+modeler::modeler():
+	block_atlas("textures/blocks.png", 16, 16)
+{
+	/*block_atlas.rows = 16;
 	block_atlas.columns = 16;
 	block_atlas.texture.loadFromFile("textures/blocks.png");
 	block_atlas.texture.setSmooth(false);
 	block_atlas.texture.setRepeated(false);
+	*/
 	//block_atlas.texture.generateMipmap();
 }
 

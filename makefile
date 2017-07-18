@@ -1,7 +1,7 @@
 CC= g++
 CFLAGS= -std=c++17 -Wall -g -O2
 LDFLAGS= -lpthread -lGLEW -lGLU -lGL -lsfml-graphics -lsfml-window -lsfml-system
-OBJS= obj/world.o obj/entity.o obj/map.o obj/chunk.o obj/block.o obj/generator.o obj/scene.o obj/modeler.o obj/vbo.o obj/vao.o obj/atlas.o
+OBJS= obj/world.o obj/entity.o obj/map.o obj/chunk.o obj/block.o obj/generator.o obj/scene.o obj/modeler.o obj/vbo.o obj/vao.o obj/atlas.o obj/shader.o
 
 all: bin/run bin/chunk-viewer
 
@@ -32,7 +32,7 @@ obj/block.o: src/block.hpp src/block.cpp | obj
 obj/generator.o: src/generator.hpp src/generator.cpp src/noise.hpp obj/chunk.o | obj
 	$(CC) $(CFLAGS) -o obj/generator.o -c src/generator.cpp
 
-obj/chunk_viewer.o: src/test/chunk_viewer.cpp obj/modeler.o obj/generator.o obj/vbo.o obj/atlas.o | obj
+obj/chunk_viewer.o: src/test/chunk_viewer.cpp obj/modeler.o obj/generator.o obj/vbo.o obj/vao.o obj/atlas.o obj/shader.o | obj
 	$(CC) $(CFLAGS) -o obj/chunk_viewer.o -c src/test/chunk_viewer.cpp
 	
 obj/scene.o: src/scene.hpp src/scene.cpp obj/modeler.o | obj
@@ -49,6 +49,9 @@ obj/modeler.o: src/modeler.hpp src/modeler.cpp obj/chunk.o obj/atlas.o | obj
 	
 obj/atlas.o: src/atlas.hpp src/atlas.cpp | obj
 	$(CC) $(CFLAGS) -o obj/atlas.o -c src/atlas.cpp
+
+obj/shader.o: src/shader.hpp src/shader.cpp | obj
+	$(CC) $(CFLAGS) -o obj/shader.o -c src/shader.cpp
 
 bin:
 	mkdir bin

@@ -31,7 +31,7 @@ void vbo::load_from_model(const model& m, vbo::usage u){
 	glEnableVertexAttribArray(2);
 	glVertexAttribPointer(
 		2,
-		2,
+		3,
 		GL_FLOAT,
 		GL_FALSE,
 		sizeof(vertex),
