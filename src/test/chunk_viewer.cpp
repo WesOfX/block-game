@@ -25,7 +25,7 @@ int main(){
 			24,
 			8,
 			8,
-			1,
+			4,
 			3
 		)
 	);	
@@ -94,6 +94,7 @@ int main(){
  	};
  	
  	GLuint mvp_id{glGetUniformLocation(s.get_id(), "mvp")};
+ 	GLuint sampler_id{glGetUniformLocation(s.get_id(), "sampler")};
  
  	va.load();
  	vb.load_from_model(cm, vbo::static_draw);
@@ -236,12 +237,12 @@ int main(){
 		
 		// glBindSampler(0, sampler);
 		
-		// TODO make uniform OOP
-		glUniformMatrix4fv(mvp_id, 1, GL_FALSE, &mvp[0][0]);
-		
+		// TODO make uniform OOP		
 		s.bind();
 		
 		m.block_atlas.bind();
+		glUniformMatrix4fv(mvp_id, 1, GL_FALSE, &mvp[0][0]);
+		glUniform1i(sampler_id, 0);
 		
 		// sf::Texture::bind(&at.texture);
 		// sf::Texture::bind(&m.block_atlas.texture);

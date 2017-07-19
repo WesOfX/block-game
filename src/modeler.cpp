@@ -1,7 +1,7 @@
 #include "modeler.hpp"
 
 modeler::modeler():
-	block_atlas("textures/blocks.png", 16, 16)
+	block_atlas("textures/blocks.png", 16, 1)
 {
 	/*block_atlas.rows = 16;
 	block_atlas.columns = 16;

@@ -1,6 +1,8 @@
 #include "atlas.hpp"
 #include "math.h"
 
+#include <iostream> // TODO REMOVE
+
 atlas::atlas(
 	const std::string& filename, 
 	size_t rows, 
@@ -14,10 +16,11 @@ atlas::atlas(
 	GLsizei width = image.getSize().x / columns,
 	        height = image.getSize().y / rows,
 	        layers = rows * columns,
-	        // mip_level = log2(std::min(width, height));
-	        mip_level = 1;
+	        mip_level = log2(height); // TODO REMOVE WIDTH
+	        // mip_level = 1;
 	        
 	glGenTextures(1, &id);
+	glActiveTexture(GL_TEXTURE0);
 	glBindTexture(GL_TEXTURE_2D_ARRAY, id);
 	glTexStorage3D(
 		GL_TEXTURE_2D_ARRAY,
@@ -27,27 +30,19 @@ atlas::atlas(
 		height,
 		layers
 	);
-	// TODO implement mipmapping 
-	// see https://www.khronos.org/opengl/wiki/Array_Texture
-	glTexSubImage3D(
+
+	/*glTexParameteri(
 		GL_TEXTURE_2D_ARRAY,
-		0, // mipmap level
-		0, // x offset
-		0, // y offset
-		0, // layer
-		width,
-		height,
-		layers,
-		GL_RGBA,
-		GL_UNSIGNED_BYTE,
-		image.getPixelsPtr()
-	);
+		GL_TEXTURE_MIN_FILTER,
+		GL_LINEAR_MIPMAP_LINEAR
+	);*/
 	
 	glTexParameteri(
 		GL_TEXTURE_2D_ARRAY,
 		GL_TEXTURE_MIN_FILTER,
-		GL_NEAREST
+		GL_LINEAR
 	);
+	
 	glTexParameteri(
 		GL_TEXTURE_2D_ARRAY,
 		GL_TEXTURE_MAG_FILTER,
@@ -63,30 +58,90 @@ atlas::atlas(
 		GL_TEXTURE_WRAP_T,
 		GL_CLAMP_TO_EDGE
 	);
+	
+	// glGenerateMipmap(GL_TEXTURE_2D_ARRAY);
+	
+	// TODO implement mipmapping 
+	// see https://www.khronos.org/opengl/wiki/Array_Texture
+	// auto pixels = ;
+	glTexSubImage3D(
+		GL_TEXTURE_2D_ARRAY,
+		0, // mipmap level
+		0,
+		0,
+		0,
+		width,
+		height,
+		layers,
+		GL_RGBA,
+		GL_UNSIGNED_BYTE,
+		image.getPixelsPtr()
+	);
+	/* glTexImage3D(
+		GL_TEXTURE_2D_ARRAY,
+		0, // mipmap level
+		GL_RGBA8,
+		width,
+		height,
+		layers,
+		0,
+		GL_RGBA,
+		GL_UNSIGNED_BYTE,
+		image.getPixelsPtr()
+	); */
+	std::cout << "mip_level " << mip_level << std::endl;
+	for(auto i = 0; i < mip_level; ++i){
+		/*glTexSubImage3D(
+			GL_TEXTURE_2D_ARRAY,
+			0, // mipmap level
+			0,
+			0,
+			i,
+			width,
+			height,
+			1,
+			GL_RGBA,
+			GL_UNSIGNED_BYTE,
+			image.getPixelsPtr()
+		);*/
+		/*glTexImage3D(
+			GL_TEXTURE_2D_ARRAY,
+			i, // mipmap level
+			GL_RGBA8,
+			width / pow(2, i),
+			height / pow(2, i),
+			layers,
+			0,
+			GL_RGBA,
+			GL_UNSIGNED_BYTE,
+			image.getPixelsPtr()
+		);*/
+	}
 }
 
 uv_quad atlas::get_uv(const vec2<size_t>& position) const{
+	// note inverted y axis
 	return {
 		{
 			{
 				0.0f,
 				1.0f,
-				0.0f
+				1.0f * position.x
 			},
 			{
 				1.0f,
 				1.0f,
-				0.0f
+				1.0f * position.x
 			},
 			{
 				1.0f,
 				0.0f,
-				0.0f
+				1.0f * position.x
 			},
 			{
 				0.0f,
 				0.0f,
-				0.0f
+				1.0f * position.x
 			}
 		}
 	};

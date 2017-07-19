@@ -3,11 +3,11 @@
 in vec3 fragment_color;
 in vec3 fragment_uv;
 
-out vec4 color;
+out vec3 color;
 
 uniform sampler2DArray sampler;
 
 void main(){
-	color = vec4(1.0f, 1.0f, 1.0f, 1.0f);
-	// color = texture(sampler, fragment_uv).rgb * fragment_color;
+	// color = vec4(1.0f, 1.0f, 1.0f, 1.0f);
+	color = texture(sampler, fragment_uv).rgb * fragment_color;
 }
