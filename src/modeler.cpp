@@ -117,42 +117,42 @@ quad modeler::generate_block_face(
 		q[1].position = {1.0f, 1.0f, 1.0f};		
 		q[2].position = {1.0f, 1.0f, 0.0f};
 		q[3].position = {0.0f, 1.0f, 0.0f};
-		for(auto& i: q) i.color = {1.0f, 1.0f, 1.0f};
+		for(auto& i: q) i.normal = {0.0f, 1.0f, 0.0f};
 		break;
 	case bottom:
 		q[0].position = {0.0f, 0.0f, 0.0f};
 		q[1].position = {1.0f, 0.0f, 0.0f};		
 		q[2].position = {1.0f, 0.0f, 1.0f};
 		q[3].position = {0.0f, 0.0f, 1.0f};
-		for(auto& i: q) i.color = {0.5f, 0.5f, 0.5f};
+		for(auto& i: q) i.normal = {0.0f, -1.0f, 0.0f};
 		break;
 	case front:
 		q[0].position = {0.0f, 0.0f, 1.0f};
 		q[1].position = {1.0f, 0.0f, 1.0f};		
 		q[2].position = {1.0f, 1.0f, 1.0f};
 		q[3].position = {0.0f, 1.0f, 1.0f};
-		for(auto& i: q) i.color = {0.83f, 0.83f, 0.83f};
+		for(auto& i: q) i.normal = {0.0f, 0.0f, 1.0f};
 		break;
 	case back:
 		q[0].position = {1.0f, 0.0f, 0.0f};
 		q[1].position = {0.0f, 0.0f, 0.0f};		
 		q[2].position = {0.0f, 1.0f, 0.0f};
 		q[3].position = {1.0f, 1.0f, 0.0f};
-		for(auto& i: q) i.color = {0.83f, 0.83f, 0.83f};
+		for(auto& i: q) i.normal = {0.0f, 0.0f, -1.0f};
 		break;
 	case left:
 		q[0].position = {0.0f, 0.0f, 0.0f};
 		q[1].position = {0.0f, 0.0f, 1.0f};		
 		q[2].position = {0.0f, 1.0f, 1.0f};
 		q[3].position = {0.0f, 1.0f, 0.0f};
-		for(auto& i: q) i.color = {0.66f, 0.66f, 0.66f};
+		for(auto& i: q) i.normal = {-1.0f, 0.0f, 0.0f};
 		break;
 	case right:
 		q[0].position = {1.0f, 0.0f, 1.0f};
 		q[1].position = {1.0f, 0.0f, 0.0f};		
 		q[2].position = {1.0f, 1.0f, 0.0f};
 		q[3].position = {1.0f, 1.0f, 1.0f};
-		for(auto& i: q) i.color = {0.66f, 0.66f, 0.66f};
+		for(auto& i: q) i.normal = {1.0f, 0.0f, 0.0f};
 		break;
 	}
 	typedef decltype(decltype(q)::value_type::position) position_type;
@@ -178,6 +178,7 @@ vec2<size_t> modeler::atlas_position(
 		case bottom: return {2, 0};
 		default: return {1, 0};
 		}
+	case block::dirt: return {2, 0};
 	default: return {};
 	}
 }

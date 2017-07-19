@@ -5,6 +5,6 @@
 
 struct vertex{
 	vec3<float> position;
-	vec3<float> color;
+	vec3<float> normal;
 	vec3<float> uv;
 };

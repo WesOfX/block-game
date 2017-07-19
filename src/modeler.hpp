@@ -22,6 +22,7 @@ struct modeler{
 		right
 	};
 	atlas block_atlas;
+	// bool smooth_lighting;
 	modeler();
 	model generate_chunk_model(
 		const chunk& c,

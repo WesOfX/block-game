@@ -37,7 +37,7 @@ void vbo::load_from_model(const model& m, vbo::usage u){
 		sizeof(vertex),
 		(void*)(
 			sizeof(decltype(vertex::position)) 
-		  + sizeof(decltype(vertex::color))
+		  + sizeof(decltype(vertex::normal))
 		)
 	);
 	glEnableVertexAttribArray(0);

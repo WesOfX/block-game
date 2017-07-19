@@ -18,13 +18,13 @@ steady_clock::time_point start, end;
 int main(){
 	// Open window
 	sf::RenderWindow window(
-		sf::VideoMode(1920, 1080), 
+		sf::VideoMode(800, 600), 
 		"Block Game",
 		sf::Style::Default,
 		sf::ContextSettings(
 			24,
 			8,
-			8,
+			0,
 			4,
 			3
 		)
@@ -41,6 +41,7 @@ int main(){
 	// glDepthMask(GL_TRUE);
 	glEnable(GL_DEPTH_TEST);
 	glDepthFunc(GL_LESS);
+	glClearColor(0.0f, 0.5f, 1.0f, 1.0f);
 	
 	modeler m;
 	chunk c;
@@ -187,7 +188,7 @@ int main(){
 		// Make matrix for triangle
 		glm::mat4 projection = glm::perspective(
 			glm::radians(60.0f), 
-			16.0f / 9.0f, 
+			4.0f / 3.0f, 
 			0.1f, 
 			1000.0f
 		);
