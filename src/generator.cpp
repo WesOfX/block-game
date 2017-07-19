@@ -9,10 +9,11 @@ chunk generator::operator()(const chunk::position_type& position){
 				auto value = perlin::noise(
 					(float)row / 6,
 					(float)column / 6,
-					(float)layer / 6
+					(float)layer / 3
 				);
 				// c.blocks[row][column][layer].id = block::stone;
-				if((value + 1.0f - ((float)layer * 2 / chunk::layers)) > 0.0f){
+				//if((value + 1.0f - ((float)layer * 2 / chunk::layers)) > 0.0f){
+				if(value > 0.3f){
 					if(c.blocks[row][column][layer + 1].id == block::air)
 						c.blocks[row][column][layer].id = block::grass;
 					else

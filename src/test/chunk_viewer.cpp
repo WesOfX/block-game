@@ -16,6 +16,8 @@ using namespace std::chrono;
 steady_clock::time_point start, end;
 
 int main(){
+	std::cout << "size of block: " << sizeof(block) << std::endl;
+
 	// Open window
 	sf::RenderWindow window(
 		sf::VideoMode(800, 600), 
@@ -94,8 +96,8 @@ int main(){
  		"shaders/fragment_shader"
  	};
  	
- 	GLuint mvp_id{glGetUniformLocation(s.get_id(), "mvp")};
- 	GLuint sampler_id{glGetUniformLocation(s.get_id(), "sampler")};
+ 	GLint mvp_id{glGetUniformLocation(s.get_id(), "mvp")};
+ 	GLint sampler_id{glGetUniformLocation(s.get_id(), "sampler")};
  
  	va.load();
  	vb.load_from_model(cm, vbo::static_draw);
@@ -195,7 +197,7 @@ int main(){
 		
 		glm::mat4 view = glm::lookAt(
 			camera_position,
-			glm::vec3(16.0f, 16.0f, 16.0f),
+			glm::vec3(8.0f, camera_position.y - 4.0f, 8.0f),
 			glm::vec3(0, 1, 0)
 		);
 		

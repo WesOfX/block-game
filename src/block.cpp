@@ -15,6 +15,30 @@ bool block::transparent() const{
 	}
 }
 
+uint8_t block::emittance() const{
+	switch(id){
+	default: return 0;
+	}
+}
+
+/*
+uint8_t get_sky_light() const{
+
+}
+
+void set_sky_light(uint8_t value){
+
+}
+
+uint8_t get_light() const{
+
+}
+
+void set_light(uint8_t value){
+
+}
+*/
+
 std::ostream& operator<<(
 	std::ostream& os, 
 	const block& b

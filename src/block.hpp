@@ -12,9 +12,24 @@ struct block{
 	};
 	
 	id_type id = air;
+	uint8_t light:4, sky_light:4;
 	
 	bool visible() const;
 	bool transparent() const;
+	uint8_t emittance() const;
+	
+	/*
+	// sky light is a 4-bit value packed inside "lighting"
+	uint8_t get_sky_light() const;
+	void set_sky_light(uint8_t value);
+	
+	// block light is a 4-bit value packed inside "lighting"
+	uint8_t get_light() const;
+	void set_light(uint8_t value);
+	
+private:
+	uint8_t lighting;
+	*/
 };
 
 std::ostream& operator<<(
