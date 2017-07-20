@@ -11,7 +11,9 @@ struct chunk{
 	typedef vec3<size_t> block_position_type;
 	static constexpr size_t rows = 16, columns = 16, layers = 128;
 	const block& get(const block_position_type& position) const;
+	block& at(const block_position_type& position);
 	void set(const block_position_type& position, const block& b);
+	void set_sky_light(const block_position_type& position, uint8_t value);
 	void update_light();
 	
 	friend std::ostream& operator<<(std::ostream& os, const chunk& c);

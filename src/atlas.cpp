@@ -1,8 +1,6 @@
 #include "atlas.hpp"
 #include "math.h"
 
-#include <iostream> // TODO REMOVE
-
 atlas::atlas(
 	const std::string& filename, 
 	size_t rows, 
@@ -16,8 +14,8 @@ atlas::atlas(
 	GLsizei width = image.getSize().x / columns,
 	        height = image.getSize().y / rows,
 	        layers = rows * columns,
-	        mip_level = log2(height); // TODO REMOVE WIDTH
-	        // mip_level = 1;
+	        // mip_level = log2(height); // width?
+	        mip_level = 1;
 	        
 	glGenTextures(1, &id);
 	glActiveTexture(GL_TEXTURE0);
@@ -41,8 +39,7 @@ atlas::atlas(
 		GL_TEXTURE_2D_ARRAY,
 		GL_TEXTURE_MIN_FILTER,
 		GL_LINEAR
-	);
-	
+	);	
 	glTexParameteri(
 		GL_TEXTURE_2D_ARRAY,
 		GL_TEXTURE_MAG_FILTER,
@@ -77,7 +74,7 @@ atlas::atlas(
 		GL_UNSIGNED_BYTE,
 		image.getPixelsPtr()
 	);
-	/* glTexImage3D(
+	/*glTexImage3D(
 		GL_TEXTURE_2D_ARRAY,
 		0, // mipmap level
 		GL_RGBA8,
@@ -88,10 +85,9 @@ atlas::atlas(
 		GL_RGBA,
 		GL_UNSIGNED_BYTE,
 		image.getPixelsPtr()
-	); */
-	std::cout << "mip_level " << mip_level << std::endl;
-	for(auto i = 0; i < mip_level; ++i){
-		/*glTexSubImage3D(
+	);*/
+	/*for(auto i = 0; i < mip_level; ++i){
+		glTexSubImage3D(
 			GL_TEXTURE_2D_ARRAY,
 			0, // mipmap level
 			0,
@@ -103,8 +99,8 @@ atlas::atlas(
 			GL_RGBA,
 			GL_UNSIGNED_BYTE,
 			image.getPixelsPtr()
-		);*/
-		/*glTexImage3D(
+		);
+		glTexImage3D(
 			GL_TEXTURE_2D_ARRAY,
 			i, // mipmap level
 			GL_RGBA8,
@@ -115,8 +111,8 @@ atlas::atlas(
 			GL_RGBA,
 			GL_UNSIGNED_BYTE,
 			image.getPixelsPtr()
-		);*/
-	}
+		);
+	}*/
 }
 
 uv_quad atlas::get_uv(const vec2<size_t>& position) const{
