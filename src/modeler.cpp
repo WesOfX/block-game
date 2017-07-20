@@ -121,8 +121,14 @@ quad modeler::generate_block_face(
 		q[3].position = {0.0f, 1.0f, 0.0f};
 		for(auto& i: q) i.normal = {0.0f, 1.0f, 0.0f};
 		for(auto i = 0; i < 4; ++i){
-			// TODO lighting
-			// TODO make "position" accessor for chunk?
+			if(position.z == chunk::layers - 1)	q[i].sky_light = 1.0f;
+			else q[i].sky_light = (float)c.get(
+				{
+					position.x,
+					position.y,
+					position.z + 1
+				}
+			).sky_light / 15;
 		}
 		break;
 	case bottom:
@@ -131,6 +137,16 @@ quad modeler::generate_block_face(
 		q[2].position = {1.0f, 0.0f, 1.0f};
 		q[3].position = {0.0f, 0.0f, 1.0f};
 		for(auto& i: q) i.normal = {0.0f, -1.0f, 0.0f};
+		for(auto i = 0; i < 4; ++i){
+			if(position.z == 0)	q[i].sky_light = 0.0f;
+			else q[i].sky_light = (float)c.get(
+				{
+					position.x,
+					position.y,
+					position.z - 1
+				}
+			).sky_light / 15;
+		}
 		break;
 	case front:
 		q[0].position = {0.0f, 0.0f, 1.0f};
@@ -138,6 +154,16 @@ quad modeler::generate_block_face(
 		q[2].position = {1.0f, 1.0f, 1.0f};
 		q[3].position = {0.0f, 1.0f, 1.0f};
 		for(auto& i: q) i.normal = {0.0f, 0.0f, 1.0f};
+		for(auto i = 0; i < 4; ++i){
+			if(position.x == chunk::rows - 1) q[i].sky_light = 0.0f;
+			else q[i].sky_light = (float)c.get(
+				{
+					position.x + 1,
+					position.y,
+					position.z
+				}
+			).sky_light / 15;
+		}
 		break;
 	case back:
 		q[0].position = {1.0f, 0.0f, 0.0f};
@@ -145,6 +171,16 @@ quad modeler::generate_block_face(
 		q[2].position = {0.0f, 1.0f, 0.0f};
 		q[3].position = {1.0f, 1.0f, 0.0f};
 		for(auto& i: q) i.normal = {0.0f, 0.0f, -1.0f};
+		for(auto i = 0; i < 4; ++i){
+			if(position.x == 0) q[i].sky_light = 0.0f;
+			else q[i].sky_light = (float)c.get(
+				{
+					position.x - 1,
+					position.y,
+					position.z
+				}
+			).sky_light / 15;
+		}
 		break;
 	case left:
 		q[0].position = {0.0f, 0.0f, 0.0f};
@@ -152,6 +188,16 @@ quad modeler::generate_block_face(
 		q[2].position = {0.0f, 1.0f, 1.0f};
 		q[3].position = {0.0f, 1.0f, 0.0f};
 		for(auto& i: q) i.normal = {-1.0f, 0.0f, 0.0f};
+		for(auto i = 0; i < 4; ++i){
+			if(position.y == 0) q[i].sky_light = 0.0f;
+			else q[i].sky_light = (float)c.get(
+				{
+					position.x,
+					position.y - 1,
+					position.z
+				}
+			).sky_light / 15;
+		}
 		break;
 	case right:
 		q[0].position = {1.0f, 0.0f, 1.0f};
@@ -159,6 +205,16 @@ quad modeler::generate_block_face(
 		q[2].position = {1.0f, 1.0f, 0.0f};
 		q[3].position = {1.0f, 1.0f, 1.0f};
 		for(auto& i: q) i.normal = {1.0f, 0.0f, 0.0f};
+		for(auto i = 0; i < 4; ++i){
+			if(position.y == chunk::columns - 1) q[i].sky_light = 0.0f;
+			else q[i].sky_light = (float)c.get(
+				{
+					position.x,
+					position.y + 1,
+					position.z
+				}
+			).sky_light / 15;
+		}
 		break;
 	}
 	// 0.0014 to 0.0029 seconds (slowest)

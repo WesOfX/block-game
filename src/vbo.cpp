@@ -40,6 +40,19 @@ void vbo::load_from_model(const model& m, vbo::usage u){
 		  + sizeof(decltype(vertex::normal))
 		)
 	);
+	glEnableVertexAttribArray(3);
+	glVertexAttribPointer(
+		3,
+		1,
+		GL_FLOAT,
+		GL_FALSE,
+		sizeof(vertex),
+		(void*)(
+			sizeof(decltype(vertex::position)) 
+		  + sizeof(decltype(vertex::normal))
+		  + sizeof(decltype(vertex::uv))
+		)
+	);
 	glEnableVertexAttribArray(0);
 }
 

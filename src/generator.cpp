@@ -18,13 +18,14 @@ chunk generator::operator()(const chunk::position_type& position){
 						layer == chunk::layers - 1 
 					 || c.get({row, column, layer + 1}).id == block::air
 					)
-						c.set({row, column, layer}, {block::grass});
+						c.set({row, column, layer}, {block::grass, 0, 0});
 					else
-						c.set({row, column, layer}, {block::dirt});
+						c.set({row, column, layer}, {block::dirt, 0, 0});
 				}
 				// else c.blocks[row][column][0].id = block::stone;
 			}
 		}
 	}
+	c.update_light();
 	return c;
 }

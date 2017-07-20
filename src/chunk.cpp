@@ -12,9 +12,9 @@ void chunk::update_light(){
 	// update skylight
 	for(auto& row: blocks){
 		for(auto& column: row){
-			for(auto& block: column){
-				if(!block.transparent()) break;
-				else block.sky_light = 15; // max
+			for(auto layer = layers - 1; layer != 0; --layer){
+				if(!column[layer].transparent()) break;
+				else column[layer].sky_light = 15; // max
 			}	
 		}
 	}
