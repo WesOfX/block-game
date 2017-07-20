@@ -14,10 +14,13 @@ chunk generator::operator()(const chunk::position_type& position){
 				// c.blocks[row][column][layer].id = block::stone;
 				//if((value + 1.0f - ((float)layer * 2 / chunk::layers)) > 0.0f){
 				if(value > 0.3f){
-					if(c.blocks[row][column][layer + 1].id == block::air)
-						c.blocks[row][column][layer].id = block::grass;
+					if(
+						layer == chunk::layers - 1 
+					 || c.get({row, column, layer + 1}).id == block::air
+					)
+						c.set({row, column, layer}, {block::grass});
 					else
-						c.blocks[row][column][layer].id = block::dirt;
+						c.set({row, column, layer}, {block::dirt});
 				}
 				// else c.blocks[row][column][0].id = block::stone;
 			}

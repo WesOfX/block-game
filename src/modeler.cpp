@@ -24,78 +24,78 @@ model modeler::generate_chunk_model(
 		for(size_t column = 0; column < chunk::columns; ++column){
 			for(size_t layer = 0; layer < chunk::layers; ++layer){
 				// check surrounding blocks
-				if(c.blocks[row][column][layer].visible()){
-					const auto id = c.blocks[row][column][layer].id;
+				if(c.get({row, column, layer}).visible()){
+					const auto& block = c.get({row, column, layer});
 					const chunk::block_position_type position{row, column, layer};
 					quad q;
 					if(
 						layer == 0 
-					 || c.blocks[row][column][layer - 1].transparent()
+					 || c.get({row, column, layer - 1}).transparent()
 					){
-						q = generate_block_face(id, position, bottom);
+						q = generate_block_face(block, c, position, bottom);
 						m.vertices.insert(m.vertices.end(), q.begin(), q.end());
 					}
 					if(
 						layer == chunk::layers - 1 
-					 || c.blocks[row][column][layer + 1].transparent()
+					 || c.get({row, column, layer + 1}).transparent()
 					){
-						q = generate_block_face(id, position, top);
+						q = generate_block_face(block, c, position, top);
 						m.vertices.insert(m.vertices.end(), q.begin(), q.end());
 					}
 					if(
 						(
 							column == 0  
 						 && west_chunk 
-						 && west_chunk->blocks[row][chunk::columns - 1][layer].transparent()
+						 && west_chunk->get({row, chunk::columns - 1, layer}).transparent()
 					 	)
 					 || (
 					 		column > 0 
-					 	 && c.blocks[row][column - 1][layer].transparent()
+					 	 && c.get({row, column - 1, layer}).transparent()
 					 	)
 					){
-						q = generate_block_face(id, position, left);
+						q = generate_block_face(block, c, position, left);
 						m.vertices.insert(m.vertices.end(), q.begin(), q.end());
 					}
 					if(
 						(
 							column == chunk::columns - 1
 						 && east_chunk 
-						 && east_chunk->blocks[row][0][layer].transparent()
+						 && east_chunk->get({row, 0, layer}).transparent()
 					 	)
 					 || (
 					 		column < chunk::columns - 1 
-					 	 && c.blocks[row][column + 1][layer].transparent()
+					 	 && c.get({row, column + 1, layer}).transparent()
 					 	)
 					){
-						q = generate_block_face(id, position, right);
+						q = generate_block_face(block, c, position, right);
 						m.vertices.insert(m.vertices.end(), q.begin(), q.end());
 					}
 					if(
 						(
 							row == 0 
 						 && north_chunk 
-						 && north_chunk->blocks[chunk::rows - 1][column][layer].transparent()
+						 && north_chunk->get({chunk::rows - 1, column, layer}).transparent()
 					 	)
 					 || (
 					 		row > 0 
-					 	 && c.blocks[row - 1][column][layer].transparent()
+					 	 && c.get({row - 1, column, layer}).transparent()
 					 	)
 					){
-						q = generate_block_face(id, position, back);
+						q = generate_block_face(block, c, position, back);
 						m.vertices.insert(m.vertices.end(), q.begin(), q.end());
 					}
 					if(
 						(
 							row == chunk::rows - 1
 						 && south_chunk 
-						 && south_chunk->blocks[0][column][layer].transparent()
+						 && south_chunk->get({0, column, layer}).transparent()
 					 	)
 					 || (
 					 		row < chunk::rows - 1 
-					 	 && c.blocks[row + 1][column][layer].transparent()
+					 	 && c.get({row + 1, column, layer}).transparent()
 					 	)
 					){
-						q = generate_block_face(id, position, front);
+						q = generate_block_face(block, c, position, front);
 						m.vertices.insert(m.vertices.end(), q.begin(), q.end());
 					}
 				}
@@ -106,11 +106,13 @@ model modeler::generate_chunk_model(
 }
 
 quad modeler::generate_block_face(
-	block::id_type id,
+	const block& b,
+	const chunk& c,
 	const chunk::block_position_type& position, 
 	block_face face
 ) const{
 	quad q;
+	// 0.0011 to 0.0016 seconds (fastest)
 	switch(face){
 	case top:
 		q[0].position = {0.0f, 1.0f, 1.0f};
@@ -118,6 +120,10 @@ quad modeler::generate_block_face(
 		q[2].position = {1.0f, 1.0f, 0.0f};
 		q[3].position = {0.0f, 1.0f, 0.0f};
 		for(auto& i: q) i.normal = {0.0f, 1.0f, 0.0f};
+		for(auto i = 0; i < 4; ++i){
+			// TODO lighting
+			// TODO make "position" accessor for chunk?
+		}
 		break;
 	case bottom:
 		q[0].position = {0.0f, 0.0f, 0.0f};
@@ -155,6 +161,32 @@ quad modeler::generate_block_face(
 		for(auto& i: q) i.normal = {1.0f, 0.0f, 0.0f};
 		break;
 	}
+	// 0.0014 to 0.0029 seconds (slowest)
+	/*q[0].position = {
+		face == back || face == right,
+		face == top,
+		face == top || face == front || face == right
+	};
+	q[1].position = {
+		face != back && face != left,
+		face == top,
+		face == top || face == front || face == left
+	};
+	q[2].position = {
+		face != back && face != left,
+		face != bottom,
+		face == bottom || face == front || face == left
+	};
+	q[3].position = {
+		face == back || face == right,
+		face != bottom,
+		face == bottom || face == front || face == right
+	};
+	for(auto& i: q) i.normal = {
+		-(face == left) + (face == right),
+		-(face == bottom) + (face == top),
+		-(face == back) + (face == front)
+	};*/
 	typedef decltype(decltype(q)::value_type::position) position_type;
 	typedef position_type::coordinate_type coordinate_type;
 	for(auto& i: q) i.position += position_type{
@@ -162,10 +194,17 @@ quad modeler::generate_block_face(
 		(coordinate_type)position.z, // layer
 		(coordinate_type)position.x  // row
 	};
-	auto uv_q{block_atlas.get_uv(atlas_position(id, face))};
+	auto uv_q{block_atlas.get_uv(atlas_position(b.id, face))};
 	for(auto i = 0; i < 4; ++i) q[i].uv = uv_q[i];
 	return q;
 }
+
+/*void modeler::position_quad(
+	quad& q,
+	modeler::block_face face
+){
+	
+}*/
 
 vec2<size_t> modeler::atlas_position(
 	block::id_type id,

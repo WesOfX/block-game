@@ -1,5 +1,13 @@
 #include "chunk.hpp"
 
+const block& chunk::get(const block_position_type& position) const{
+	return blocks.at(position.x).at(position.y).at(position.z);
+}
+
+void chunk::set(const block_position_type& position, const block& b){
+	blocks.at(position.x).at(position.y).at(position.z) = b;
+}
+
 void chunk::update_light(){
 	// update skylight
 	for(auto& row: blocks){

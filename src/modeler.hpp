@@ -32,10 +32,15 @@ struct modeler{
 		const std::optional<chunk>& west_chunk = {}
 	) const;
 	quad generate_block_face(
-		block::id_type id,
+		const block& b,
+		const chunk& c,
 		const chunk::block_position_type& position, 
 		block_face face
 	) const;
+	/*void position_quad(
+		quad& q,
+		block_face, face
+	) const;*/
 	static vec2<size_t> atlas_position(
 		block::id_type id, 
 		block_face face
