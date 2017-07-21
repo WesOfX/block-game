@@ -9,7 +9,7 @@
 struct chunk{
 	typedef vec2<size_t> position_type;
 	typedef vec3<size_t> block_position_type;
-	static constexpr size_t rows = 16, columns = 16, layers = 128;
+	static constexpr size_t rows = 16, columns = 16, layers = 256;
 	const block& get(const block_position_type& position) const;
 	block& at(const block_position_type& position);
 	void set(const block_position_type& position, const block& b);

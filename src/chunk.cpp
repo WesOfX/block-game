@@ -12,10 +12,6 @@ void chunk::set(const block_position_type& position, const block& b){
 	blocks.at(position.x).at(position.y).at(position.z) = b;
 }
 
-void chunk::set_sky_light(const block_position_type& position, uint8_t value){
-	blocks.at(position.x).at(position.y).at(position.z).sky_light = value;
-}
-
 void chunk::update_light(){
 	// update skylight
 	for(auto& row: blocks){

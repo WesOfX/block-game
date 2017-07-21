@@ -20,7 +20,9 @@ void map::load_chunk(const chunk::position_type& position){
 	}
 	else{
 		// generate new chunk
-		chunks.emplace(position, gen(position));
+		chunk c;
+		gen.generate_terrain(c, position);
+		chunks.insert({position, c});
 	}
 }
 

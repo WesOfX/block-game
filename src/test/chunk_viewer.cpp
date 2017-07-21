@@ -54,7 +54,8 @@ int main(){
 	// atlas at;
 	
 	start = steady_clock::now();
-	c = gen({0, 0});
+	gen.generate_terrain(c, {0, 0});
+	gen.update_sky_light(c);
 	end = steady_clock::now();
 	std::cout 
  << "Chunk generated in " 
