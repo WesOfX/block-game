@@ -30,14 +30,14 @@ model modeler::generate_chunk_model(
 					quad q;
 					if(
 						layer == 0 
-					 || c.get({row, column, layer - 1}).transparent()
+					 || c.get({row, column, layer - 1}).opacity() < 15
 					){
 						q = generate_block_face(block, c, position, bottom);
 						m.vertices.insert(m.vertices.end(), q.begin(), q.end());
 					}
 					if(
 						layer == chunk::layers - 1 
-					 || c.get({row, column, layer + 1}).transparent()
+					 || c.get({row, column, layer + 1}).opacity() < 15
 					){
 						q = generate_block_face(block, c, position, top);
 						m.vertices.insert(m.vertices.end(), q.begin(), q.end());
@@ -46,11 +46,11 @@ model modeler::generate_chunk_model(
 						(
 							column == 0  
 						 && west_chunk 
-						 && west_chunk->get({row, chunk::columns - 1, layer}).transparent()
+						 && west_chunk->get({row, chunk::columns - 1, layer}).opacity() < 15
 					 	)
 					 || (
 					 		column > 0 
-					 	 && c.get({row, column - 1, layer}).transparent()
+					 	 && c.get({row, column - 1, layer}).opacity() < 15
 					 	)
 					){
 						q = generate_block_face(block, c, position, left);
@@ -60,11 +60,11 @@ model modeler::generate_chunk_model(
 						(
 							column == chunk::columns - 1
 						 && east_chunk 
-						 && east_chunk->get({row, 0, layer}).transparent()
+						 && east_chunk->get({row, 0, layer}).opacity() < 15
 					 	)
 					 || (
 					 		column < chunk::columns - 1 
-					 	 && c.get({row, column + 1, layer}).transparent()
+					 	 && c.get({row, column + 1, layer}).opacity() < 15
 					 	)
 					){
 						q = generate_block_face(block, c, position, right);
@@ -74,11 +74,11 @@ model modeler::generate_chunk_model(
 						(
 							row == 0 
 						 && north_chunk 
-						 && north_chunk->get({chunk::rows - 1, column, layer}).transparent()
+						 && north_chunk->get({chunk::rows - 1, column, layer}).opacity() < 15
 					 	)
 					 || (
 					 		row > 0 
-					 	 && c.get({row - 1, column, layer}).transparent()
+					 	 && c.get({row - 1, column, layer}).opacity() < 15
 					 	)
 					){
 						q = generate_block_face(block, c, position, back);
@@ -88,11 +88,11 @@ model modeler::generate_chunk_model(
 						(
 							row == chunk::rows - 1
 						 && south_chunk 
-						 && south_chunk->get({0, column, layer}).transparent()
+						 && south_chunk->get({0, column, layer}).opacity() < 15
 					 	)
 					 || (
 					 		row < chunk::rows - 1 
-					 	 && c.get({row + 1, column, layer}).transparent()
+					 	 && c.get({row + 1, column, layer}).opacity() < 15
 					 	)
 					){
 						q = generate_block_face(block, c, position, front);
@@ -274,6 +274,7 @@ vec2<size_t> modeler::atlas_position(
 		default: return {1, 0};
 		}
 	case block::dirt: return {2, 0};
+	case block::leaves: return {4, 0};
 	default: return {};
 	}
 }

@@ -7,11 +7,12 @@ bool block::visible() const{
 	}
 }
 
-bool block::transparent() const{
+uint8_t block::opacity() const{
 	switch(id){
-	case air: return true;
-	case glass: return true;
-	default: return false;
+	case air: return 0;
+	case glass: return 0;
+	case leaves: return 1;
+	default: return 15;
 	}
 }
 
@@ -20,24 +21,6 @@ uint8_t block::emittance() const{
 	default: return 0;
 	}
 }
-
-/*
-uint8_t get_sky_light() const{
-
-}
-
-void set_sky_light(uint8_t value){
-
-}
-
-uint8_t get_light() const{
-
-}
-
-void set_light(uint8_t value){
-
-}
-*/
 
 std::ostream& operator<<(
 	std::ostream& os, 

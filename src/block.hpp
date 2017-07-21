@@ -8,14 +8,15 @@ struct block{
 		grass,
 		dirt,
 		stone,
-		glass
+		glass,
+		leaves
 	};
 	
 	id_type id = air;
 	uint8_t light:4, sky_light:4;
 	
 	bool visible() const;
-	bool transparent() const;
+	uint8_t opacity() const;
 	uint8_t emittance() const;
 	
 	/*

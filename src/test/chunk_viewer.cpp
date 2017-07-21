@@ -43,7 +43,12 @@ int main(){
 	// glDepthMask(GL_TRUE);
 	glEnable(GL_DEPTH_TEST);
 	glDepthFunc(GL_LESS);
-	glClearColor(0.0f, 0.5f, 1.0f, 1.0f);
+	glClearColor(0.1f, 0.1f, 0.1f, 0.0f);
+	// glEnable(GL_BLEND);
+	// glBlendFunc(GL_ONE, GL_ZERO);
+	glEnable(GL_ALPHA_TEST); // that's the golden ticket!
+	glAlphaFunc(GL_GREATER, 0.5f); //
+	
 	
 	modeler m;
 	chunk c;
@@ -118,7 +123,7 @@ int main(){
  	glGenSamplers(1, &sampler);*/
 
  	
- 	glm::vec3 camera_position{18.0f, 8.0f, 18.0f},
+ 	glm::vec3 camera_position{24.0f, 256.0f, 24.0f},
  	          camera_velocity{0.0f, 0.0f, 0.0f};
  	          
  	float camera_speed = 16.0f;
@@ -198,7 +203,7 @@ int main(){
 		
 		glm::mat4 view = glm::lookAt(
 			camera_position,
-			glm::vec3(8.0f, camera_position.y - 24.0f, 8.0f),
+			glm::vec3(8.0f, camera_position.y - 12.0f, 8.0f),
 			glm::vec3(0, 1, 0)
 		);
 		
