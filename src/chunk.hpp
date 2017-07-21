@@ -13,8 +13,6 @@ struct chunk{
 	const block& get(const block_position_type& position) const;
 	block& at(const block_position_type& position);
 	void set(const block_position_type& position, const block& b);
-	void set_sky_light(const block_position_type& position, uint8_t value);
-	void update_light();
 	
 	friend std::ostream& operator<<(std::ostream& os, const chunk& c);
 	friend std::istream& operator>>(std::istream& is, chunk& c);
