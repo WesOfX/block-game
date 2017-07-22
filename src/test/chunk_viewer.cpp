@@ -7,6 +7,7 @@
 #include <SFML/OpenGL.hpp>
 #include "../modeler.hpp"
 #include "../generator.hpp"
+#include "../updater.hpp"
 #include "../vbo.hpp"
 #include "../vao.hpp"
 #include "../atlas.hpp"
@@ -53,15 +54,21 @@ int main(){
 	modeler m;
 	chunk c;
 	generator gen;
+	updater upd;
 	model cm;
 	vbo vb;
 	vao va;
 	// atlas at;
 	
 	start = steady_clock::now();
+	
 	gen.generate_terrain(c, {0, 0});
-	gen.update_sky_light(c);
+	c.at({8, 8, 252}).id = block::fire;
+	upd.update_sky_light(c);
+	upd.update_torch_light(c);
+	
 	end = steady_clock::now();
+	
 	std::cout 
  << "Chunk generated in " 
  << duration<float>(end - start).count()
@@ -195,7 +202,7 @@ int main(){
 		
 		// Make matrix for triangle
 		glm::mat4 projection = glm::perspective(
-			glm::radians(60.0f), 
+			glm::radians(90.0f), 
 			4.0f / 3.0f, 
 			0.1f, 
 			1000.0f
@@ -203,7 +210,7 @@ int main(){
 		
 		glm::mat4 view = glm::lookAt(
 			camera_position,
-			glm::vec3(8.0f, camera_position.y - 12.0f, 8.0f),
+			glm::vec3(8.0f, camera_position.y - 1.0f, 8.0f),
 			glm::vec3(0, 1, 0)
 		);
 		

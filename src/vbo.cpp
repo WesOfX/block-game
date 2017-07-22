@@ -53,6 +53,20 @@ void vbo::load_from_model(const model& m, vbo::usage u){
 		  + sizeof(decltype(vertex::uv))
 		)
 	);
+	glEnableVertexAttribArray(4);
+	glVertexAttribPointer(
+		4,
+		1,
+		GL_FLOAT,
+		GL_FALSE,
+		sizeof(vertex),
+		(void*)(
+			sizeof(decltype(vertex::position)) 
+		  + sizeof(decltype(vertex::normal))
+		  + sizeof(decltype(vertex::uv))
+		  + sizeof(decltype(vertex::sky_light))
+		)
+	);
 	glEnableVertexAttribArray(0);
 }
 

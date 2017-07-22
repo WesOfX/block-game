@@ -129,6 +129,14 @@ quad modeler::generate_block_face(
 					position.z + 1
 				}
 			).sky_light / 15;
+			if(position.z == chunk::layers - 1)	q[i].torch_light = 0.0f;
+			else q[i].torch_light = (float)c.get(
+				{
+					position.x,
+					position.y,
+					position.z + 1
+				}
+			).torch_light / 15;
 		}
 		break;
 	case bottom:
@@ -146,6 +154,14 @@ quad modeler::generate_block_face(
 					position.z - 1
 				}
 			).sky_light / 15;
+			if(position.z == 0)	q[i].torch_light = 0.0f;
+			else q[i].torch_light = (float)c.get(
+				{
+					position.x,
+					position.y,
+					position.z - 1
+				}
+			).torch_light / 15;
 		}
 		break;
 	case front:
@@ -163,6 +179,14 @@ quad modeler::generate_block_face(
 					position.z
 				}
 			).sky_light / 15;
+			if(position.x == chunk::rows - 1) q[i].torch_light = 0.0f;
+			else q[i].torch_light = (float)c.get(
+				{
+					position.x + 1,
+					position.y,
+					position.z
+				}
+			).torch_light / 15;
 		}
 		break;
 	case back:
@@ -180,6 +204,14 @@ quad modeler::generate_block_face(
 					position.z
 				}
 			).sky_light / 15;
+			if(position.x == 0) q[i].torch_light = 0.0f;
+			else q[i].torch_light = (float)c.get(
+				{
+					position.x - 1,
+					position.y,
+					position.z
+				}
+			).torch_light / 15;
 		}
 		break;
 	case left:
@@ -197,6 +229,14 @@ quad modeler::generate_block_face(
 					position.z
 				}
 			).sky_light / 15;
+			if(position.y == 0) q[i].torch_light = 0.0f;
+			else q[i].torch_light = (float)c.get(
+				{
+					position.x,
+					position.y - 1,
+					position.z
+				}
+			).torch_light / 15;
 		}
 		break;
 	case right:
@@ -214,6 +254,14 @@ quad modeler::generate_block_face(
 					position.z
 				}
 			).sky_light / 15;
+			if(position.y == chunk::columns - 1) q[i].torch_light = 0.0f;
+			else q[i].torch_light = (float)c.get(
+				{
+					position.x,
+					position.y + 1,
+					position.z
+				}
+			).torch_light / 15;
 		}
 		break;
 	}
@@ -274,7 +322,9 @@ vec2<size_t> modeler::atlas_position(
 		default: return {1, 0};
 		}
 	case block::dirt: return {2, 0};
+	case block::stone: return {3, 0};
 	case block::leaves: return {4, 0};
+	case block::fire: return {5, 0};
 	default: return {};
 	}
 }

@@ -4,6 +4,7 @@ layout(location = 0) in vec3 vertex_position;
 layout(location = 1) in vec3 vertex_normal;
 layout(location = 2) in vec3 vertex_uv;
 layout(location = 3) in float vertex_sky_light;
+layout(location = 4) in float vertex_torch_light;
 
 out vec3 fragment_color;
 out vec3 fragment_uv;
@@ -14,18 +15,29 @@ void main(){
 	gl_Position = mvp * vec4(vertex_position, 1);
 	// fragment_color = vertex_normal;
 	float normal_shading = 0.5f;
-	float brightness = (1.0f - normal_shading) 
+	float base_brightness = (1.0f - normal_shading) 
 	                 + normal_shading 
 	                 * (vertex_normal.y / 2.0f + 0.5f) // (1 - normal_shading) to 1
 	                 + ((normal_shading / 6.0f) * abs(vertex_normal.x))
 	                 - ((normal_shading / 6.0f) * abs(vertex_normal.z));
-	vec3 sky_color = vec3(1.0f, 1.0f, 1.0f);
 	fragment_color.rgb = vec3(
-		brightness, 
-		brightness, 
-		brightness
+		base_brightness, 
+		base_brightness, 
+		base_brightness
 	);
+	
+	vec3 sky_color = vec3(0.1f, 0.4f, 0.5f);
 	// fragment_color *= sky_color;
-	fragment_color *= vertex_sky_light;
+	//fragment_color *= vertex_sky_light;
+	
+	vec3 torch_color = vec3(1.0f, 0.8f, 0.5f);
+	// fragment_color *= torch_color;
+	// fragment_color *= vertex_torch_light;
+	
+	fragment_color *= max(
+		sky_color * vertex_sky_light, 
+		torch_color * vertex_torch_light
+	);
+	
 	fragment_uv = vertex_uv;
 }

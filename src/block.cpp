@@ -12,13 +12,22 @@ uint8_t block::opacity() const{
 	case air: return 0;
 	case glass: return 0;
 	case leaves: return 1;
+	case fire: return 0;
 	default: return 15;
 	}
 }
 
 uint8_t block::emittance() const{
 	switch(id){
+	case fire: return 15;
 	default: return 0;
+	}
+}
+
+bool block::flammable() const{
+	switch(id){
+	case leaves: return true;
+	default: return false;
 	}
 }
 

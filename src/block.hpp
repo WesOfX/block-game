@@ -9,15 +9,17 @@ struct block{
 		dirt,
 		stone,
 		glass,
-		leaves
+		leaves,
+		fire
 	};
 	
 	id_type id = air;
-	uint8_t light:4, sky_light:4;
+	uint8_t torch_light:4, sky_light:4;
 	
 	bool visible() const;
 	uint8_t opacity() const;
 	uint8_t emittance() const;
+	bool flammable() const;
 	
 	/*
 	// sky light is a 4-bit value packed inside "lighting"

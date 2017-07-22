@@ -7,5 +7,6 @@ struct vertex{
 	vec3<float> position = {};
 	vec3<float> normal = {};
 	vec3<float> uv = {};
-	float sky_light = 0.0f;
+	float sky_light = 0.0f,
+	      torch_light = 0.0f;
 };
