@@ -16,58 +16,7 @@ void updater::update_sky_light(chunk& c) const{
 			}	
 		}
 	}
-	for(int16_t level = 15; level != 1; --level){
-		for(size_t row = 0; row < chunk::rows; ++row){
-			for(size_t column = 0; column < chunk::columns; ++column){
-				for(size_t layer = 0; layer < chunk::layers; ++layer){
-					if(c.get({row, column, layer}).sky_light == level){				      
-						if(row > 0){
-							auto& target = c.at({row - 1, column, layer});
-							target.sky_light = std::max<uint8_t>(
-								target.sky_light,
-								std::max(level - (int)target.opacity() - 1, 0)
-							);
-						}
-						if(row < chunk::rows - 1){
-							auto& target = c.at({row + 1, column, layer});
-							target.sky_light = std::max<uint8_t>(
-								target.sky_light,
-								std::max(level - (int)target.opacity() - 1, 0)
-							);
-						}
-						if(column > 0){
-							auto& target = c.at({row, column - 1, layer});
-							target.sky_light = std::max<uint8_t>(
-								target.sky_light,
-								std::max(level - (int)target.opacity() - 1, 0)
-							);
-						}
-						if(column < chunk::columns - 1){
-							auto& target = c.at({row, column + 1, layer});
-							target.sky_light = std::max<uint8_t>(
-								target.sky_light,
-								std::max(level - (int)target.opacity() - 1, 0)
-							);
-						}
-						if(layer > 0){
-							auto& target = c.at({row, column, layer - 1});
-							target.sky_light = std::max<uint8_t>(
-								target.sky_light,
-								std::max(level - (int)target.opacity() - 1, 0)
-							);
-						}
-						if(layer < chunk::layers - 1){
-							auto& target = c.at({row, column, layer + 1});
-							target.sky_light = std::max<uint8_t>(
-								target.sky_light,
-								std::max(level - (int)target.opacity() - 1, 0)
-							);
-						}
-					}
-				}	
-			}
-		}
-	}
+	flood_all_light(c, sky);
 }
 
 void updater::update_torch_light(chunk& c) const{
@@ -79,56 +28,52 @@ void updater::update_torch_light(chunk& c) const{
 			}
 		}
 	}	
+	flood_all_light(c, torch);
+}
+
+void updater::flood_all_light(chunk& c, updater::light_type lt) const{
 	for(int16_t level = 15; level != 1; --level){
 		for(size_t row = 0; row < chunk::rows; ++row){
 			for(size_t column = 0; column < chunk::columns; ++column){
 				for(size_t layer = 0; layer < chunk::layers; ++layer){
-					if(c.get({row, column, layer}).torch_light == level){				      
+					if(
+						(lt == sky && c.get({row, column, layer}).sky_light == level)
+					 || (lt == torch && c.get({row, column, layer}).torch_light == level)
+					){					      
 						if(row > 0){
 							auto& target = c.at({row - 1, column, layer});
-							target.torch_light = std::max<uint8_t>(
-								target.torch_light,
-								std::max(level - (int)target.opacity() - 1, 0)
-							);
+							spread_light(target, level, lt);
 						}
 						if(row < chunk::rows - 1){
 							auto& target = c.at({row + 1, column, layer});
-							target.torch_light = std::max<uint8_t>(
-								target.torch_light,
-								std::max(level - (int)target.opacity() - 1, 0)
-							);
+							spread_light(target, level, lt);
 						}
 						if(column > 0){
 							auto& target = c.at({row, column - 1, layer});
-							target.torch_light = std::max<uint8_t>(
-								target.torch_light,
-								std::max(level - (int)target.opacity() - 1, 0)
-							);
+							spread_light(target, level, lt);
 						}
 						if(column < chunk::columns - 1){
 							auto& target = c.at({row, column + 1, layer});
-							target.torch_light = std::max<uint8_t>(
-								target.torch_light,
-								std::max(level - (int)target.opacity() - 1, 0)
-							);
+							spread_light(target, level, lt);
 						}
 						if(layer > 0){
 							auto& target = c.at({row, column, layer - 1});
-							target.torch_light = std::max<uint8_t>(
-								target.torch_light,
-								std::max(level - (int)target.opacity() - 1, 0)
-							);
+							spread_light(target, level, lt);
 						}
 						if(layer < chunk::layers - 1){
 							auto& target = c.at({row, column, layer + 1});
-							target.torch_light = std::max<uint8_t>(
-								target.torch_light,
-								std::max(level - (int)target.opacity() - 1, 0)
-							);
+							spread_light(target, level, lt);
 						}
 					}
 				}	
 			}
 		}
 	}
+}
+
+void updater::spread_light(block& b, int16_t level, light_type lt) const{
+	(lt == sky ? b.sky_light : b.torch_light) = std::max<uint8_t>(
+		lt == sky ? b.sky_light : b.torch_light,
+		std::max(level - (int)b.opacity() - 1, 0)
+	);
 }
