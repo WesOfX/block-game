@@ -5,6 +5,7 @@
 #include "vertex.hpp"
 #include "chunk.hpp"
 #include "atlas.hpp"
+#include "util.hpp"
 
 struct model{
 	std::vector<vertex> vertices;
@@ -25,17 +26,15 @@ struct modeler{
 	// bool smooth_lighting;
 	modeler();
 	model generate_chunk_model(
-		const chunk& c,
-		const std::optional<chunk>& north_chunk = {},
-		const std::optional<chunk>& east_chunk = {},
-		const std::optional<chunk>& south_chunk = {},
-		const std::optional<chunk>& west_chunk = {}
+		const chunk3x3& chunks,
+		const chunk::position_type& position = {0, 0}
 	) const;
 	quad generate_block_face(
 		const block& b,
 		const chunk& c,
 		const chunk::block_position_type& position, 
-		block_face face
+		block_face face,
+		const chunk::position_type& chunk_position
 	) const;
 	/*void position_quad(
 		quad& q,

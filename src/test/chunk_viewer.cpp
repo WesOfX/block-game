@@ -9,7 +9,7 @@
 #include "../generator.hpp"
 #include "../updater.hpp"
 #include "../vbo.hpp"
-#include "../vao.hpp"
+// #include "../vao.hpp"
 #include "../atlas.hpp"
 #include "../shader.hpp"
 
@@ -50,49 +50,64 @@ int main(){
 	glEnable(GL_ALPHA_TEST); // that's the golden ticket!
 	glAlphaFunc(GL_GREATER, 0.5f); //
 	
-	
-	modeler m;
-	chunk c;
 	generator gen;
 	updater upd;
-	model cm;
-	vbo vb;
-	vao va;
+	modeler m;
+	std::array<std::array<chunk, 3>, 3> chunks;
+	std::array<std::array<model, 3>, 3> chunk_models;
+	std::array<std::array<vbo, 3>, 3> vbos;
+	// vao va;
 	// atlas at;
 	
 	start = steady_clock::now();
-	
-	gen.generate_terrain(c, {0, 0});
-	c.at({8, 8, 252}).id = block::fire;
-	upd.update_sky_light(c);
-	upd.update_torch_light(c);
+	// for(auto i = 0; i < chunk::layers; ++i) c.at({8, 8, i}).id = block::fire;
+	// c.at({8, 8, chunk::layers - 1}).id = block::stone;
+	chunk3x3 c3x3;
+	for(size_t r = 0; r < 3; ++r){
+		for(size_t c = 0; c < 3; ++c){
+			gen.generate_terrain(chunks[r][c], {r, c});
+			c3x3[r][c] = {chunks[r][c]};
+		}
+	}
+	upd.update_sky_light(c3x3); // TODO
+	// std::cout << "sizeof(opt): " << sizeof(std::optional<chunk>) << std::endl;
+	// upd.update_torch_light({}); // TODO	
 	
 	end = steady_clock::now();
 	
 	std::cout 
- << "Chunk generated in " 
+ << "Chunks generated in " 
  << duration<float>(end - start).count()
  << " seconds" 
  << std::endl;
  
- 	std::cout
+ 	/*std::cout
  << "Number of blocks: "
  << chunk::rows * chunk::columns * chunk::layers
- << std::endl;
+ << std::endl;*/
 	
 	start = steady_clock::now();
-	cm = m.generate_chunk_model(c);
+	
+	chunk_models[1][1] = m.generate_chunk_model(c3x3, {0, 0}); // TODO
+	/*for(size_t r = 0; r < 3; ++r){
+		for(size_t c = 0; c < 3; ++c){
+			chunk_models[r][c] = m.generate_chunk_model(c3x3, {r, c}); // TODO
+		}
+	}*/
+	// cm = m.generate_chunk_model(c);
+	
 	end = steady_clock::now();
+	
 	std::cout 
- << "Chunk modeled generated in " 
+ << "Chunks modeled generated in " 
  << duration<float>(end - start).count() 
  << " seconds" 
  << std::endl;
  
-	std::cout 
+	/*std::cout 
  << "Number of vertices: " 
  << cm.vertices.size() 
- << std::endl;
+ << std::endl;*/
 
 	/*at.rows = 16;
 	at.columns = 16;
@@ -112,8 +127,15 @@ int main(){
  	GLint mvp_id{glGetUniformLocation(s.get_id(), "mvp")};
  	GLint sampler_id{glGetUniformLocation(s.get_id(), "sampler")};
  
- 	va.load();
- 	vb.load_from_model(cm, vbo::static_draw);
+ 	// va.load();
+ 	for(size_t r = 0; r < 3; ++r){
+		for(size_t c = 0; c < 3; ++c){
+			// va.bind();
+			vbos[r][c].load_from_model(chunk_models[r][c], vbo::static_draw);
+		}
+	}
+ 	// vb.load_from_model(cm, vbo::static_draw);
+ 	
 	/*
 	// When MAGnifying the image (no bigger mipmap available), use LINEAR filtering
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
@@ -130,10 +152,14 @@ int main(){
  	glGenSamplers(1, &sampler);*/
 
  	
- 	glm::vec3 camera_position{24.0f, 256.0f, 24.0f},
- 	          camera_velocity{0.0f, 0.0f, 0.0f};
+ 	glm::vec3 camera_position{
+ 		chunk::columns * 2, 
+ 		chunk::layers, 
+ 		chunk::rows * 2
+ 	},
+ 	camera_velocity{0.0f, 0.0f, 0.0f};
  	          
- 	float camera_speed = 16.0f;
+ 	float camera_speed = 8.0f;
  	
  	sf::Clock clock;
 	
@@ -202,7 +228,7 @@ int main(){
 		
 		// Make matrix for triangle
 		glm::mat4 projection = glm::perspective(
-			glm::radians(90.0f), 
+			glm::radians(60.0f), 
 			4.0f / 3.0f, 
 			0.1f, 
 			1000.0f
@@ -210,7 +236,7 @@ int main(){
 		
 		glm::mat4 view = glm::lookAt(
 			camera_position,
-			glm::vec3(8.0f, camera_position.y - 1.0f, 8.0f),
+			glm::vec3(8.0f, camera_position.y - 8.0f, 8.0f),
 			glm::vec3(0, 1, 0)
 		);
 		
@@ -262,9 +288,17 @@ int main(){
 		
 		// sf::Texture::bind(&at.texture);
 		// sf::Texture::bind(&m.block_atlas.texture);
-		va.bind();
+		// va.bind();
+		unsigned vertex_count = 0;
+		// for(auto& r: vbos) for(auto& c: r) vertex_count += c.vertex_count;
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-		glDrawArrays(GL_QUADS, 0, vb.vertex_count);
+		for(size_t r = 0; r < 3; ++r){
+			for(size_t c = 0; c < 3; ++c){
+				vbos[r][c].bind();
+				glDrawArrays(GL_QUADS, 0, vbos[r][c].vertex_count);
+			}
+		}
+		// glDrawArrays(GL_QUADS, 0, vertex_count);
 		window.display();
 	}
 }

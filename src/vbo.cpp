@@ -10,6 +10,7 @@ void vbo::load_from_model(const model& m, vbo::usage u){
 		&m.vertices.front(),
 		u
 	);
+	va.load();
 	glEnableVertexAttribArray(0);
 	glVertexAttribPointer(
 		0,
@@ -72,4 +73,5 @@ void vbo::load_from_model(const model& m, vbo::usage u){
 
 void vbo::bind(){
 	glBindBuffer(GL_ARRAY_BUFFER, id);
+	va.bind();
 }

@@ -1,5 +1,7 @@
 #pragma once
 
+#include <functional>
+#include <optional>
 #include <glm/glm.hpp>
 #include "chunk.hpp"
 
@@ -14,6 +16,9 @@ struct std::hash<chunk::position_type>{
 		return x_hash ^ (y_hash << 1);
 	}
 };
+
+typedef std::optional<std::reference_wrapper<chunk>> chunk_ref_opt;
+typedef std::array<std::array<chunk_ref_opt, 3>, 3> chunk3x3;
 
 // TODO
 /*

@@ -8,11 +8,11 @@ void generator::generate_terrain(
 		for(size_t column = 0; column < chunk::rows; ++column){
 			for(size_t layer = chunk::layers - 1; layer != 0; --layer){
 				auto value = perlin::noise(
-					(float)row / 12,
-					(float)column / 12,
-					(float)layer / 4
+					(float)(row + position.x * chunk::rows) / 9,
+					(float)(column + position.y * chunk::columns) / 9,
+					(float)layer / 5
 				);
-				if(value > 0.2f){
+				if(value > 0.3f){
 					if(
 						layer == chunk::layers - 1 
 					 || c.get({row, column, layer + 1}).id == block::air
