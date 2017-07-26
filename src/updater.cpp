@@ -104,6 +104,18 @@ void updater::flood_all_light(const chunk3x3& c3x3, updater::light_type lt) cons
 	}
 }
 
+void updater::update_map(map& m) const{
+	for(auto& chunk: m.chunks){ // pair<chunk position, chunk>
+		chunk3x3 c3x3{
+			// TODO
+		};
+		while(chunk.second.has_updates()){
+			update_block(c3x3, chunk.second.next_update());
+			chunk.second.pop_update();
+		}
+	}
+}
+
 void updater::update_block(
 	const chunk3x3& c3x3,
 	const chunk::block_position_type& block_position

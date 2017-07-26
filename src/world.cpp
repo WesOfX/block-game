@@ -7,16 +7,38 @@ world::~world(){
 }
 
 void world::update(){
-	if(
-		!chunk_map_thread.joinable() 
-	 && clock::now() - last_chunk_map_tick > chunk_map_tick(1.0f)
+	if( // if the chunk io thread isn't busy
+		!chunk_io_thread.joinable() 
+	 && clock::now() - last_chunk_io_tick > chunk_io_tick(1.0f)
 	)
-		chunk_map_thread = std::thread(&world::update_chunk_map, this);
-	else chunk_map_thread.join();
+		chunk_io_thread = std::thread(&world::update_chunk_io, this);
+	else chunk_io_thread.join();
+	
+	if( // if the map thread isn't busy
+		!map_thread.joinable() 
+	 && clock::now() - last_map_tick > map_tick(1.0f)
+	)
+		map_thread = std::thread(&world::update_map, this);
+	else map_thread.join();
+	
+	if( // if the mob thread isn't busy
+		!mob_thread.joinable() 
+	 && clock::now() - last_mob_tick > mob_tick(1.0f)
+	)
+		mob_thread = std::thread(&world::update_mobs, this);
+	else mob_thread.join();
+	
+	if( // if the player thread isn't busy
+		!player_thread.joinable() 
+	 && clock::now() - last_player_tick > player_tick(1.0f)
+	)
+		player_thread = std::thread(&world::update_players, this);
+	else player_thread.join();
 }
 
-void world::update_chunk_map(){
+void world::update_chunk_io(){
 	for(auto& player: players){
+		// if(!chunk_io_thread.joinable()){ // If the thread is not busy
 		for( // For any chunk in range (manhattan distance)
 			int row = -chunk_loading_distance; 
 			row < chunk_loading_distance; 
@@ -50,49 +72,36 @@ void world::update_chunk_map(){
 				}
 			}
 		}
-		if(!chunk_io_thread.joinable()){ // If the thread is not busy
-			if(!chunk_loading_queue.empty()){
-				auto closest_unloaded_chunk = std::min_element(
-					chunk_loading_queue.begin(),
-					chunk_loading_queue.end(),
-					[&player](
-						const chunk::position_type& a,
-						const chunk::position_type& b
-					){
-						return std::hypot(
-							player.position.x / chunk::columns - a.x,
-							player.position.y / chunk::rows - a.y
-						) < std::hypot(
-							player.position.x / chunk::columns - b.x,
-							player.position.y / chunk::rows - b.y
-						);
-					}
-				);
-				chunk_io_thread = std::thread(
-					&map::load_chunk,
-					&m,
-					*closest_unloaded_chunk
-				);
-				chunk_loading_queue.erase(closest_unloaded_chunk);
-			}
-		} 
-		else chunk_io_thread.join();
-		chunk_loading_queue.clear(); // Remakes the queue every tick!
 	}
-	
+	if(!chunk_loading_queue.empty()){
+		auto &player = players.at(
+			std::uniform_int_distribution<size_t>(0, players.size() - 1)(rng)
+		);
+		auto closest_unloaded_chunk = std::min_element(
+			chunk_loading_queue.begin(),
+			chunk_loading_queue.end(),
+			[&player](
+				const chunk::position_type& a,
+				const chunk::position_type& b
+			){
+				return std::hypot(
+					player.position.x / chunk::columns - a.x,
+					player.position.y / chunk::rows - a.y
+				) < std::hypot(
+					player.position.x / chunk::columns - b.x,
+					player.position.y / chunk::rows - b.y
+				);
+			}
+		);
+		m.load_chunk(*closest_unloaded_chunk);
+		chunk_loading_queue.erase(closest_unloaded_chunk);
+	}
+	chunk_loading_queue.clear(); // Remakes the queue every tick!
 }
 
-void world::update_blocks(){
+void world::update_map(){
 	++time_of_day;
-	for(auto& chunk: m.chunks){ // pair<chunk position, chunk>
-		chunk3x3 c3x3{
-			// TODO
-		};
-		while(chunk.second.has_updates()){
-			upd.update_block(c3x3, chunk.second.next_update());
-			chunk.second.pop_update();
-		}
-	}
+	upd.update_map(m);
 }
 
 void world::update_mobs(){

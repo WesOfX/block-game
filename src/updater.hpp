@@ -12,6 +12,7 @@ struct updater{
 
 	void update_sky_light(const chunk3x3& c3x3) const;
 	void update_torch_light(const chunk3x3& c3x3) const;
+	void update_map(map& m) const;
 	void update_block(
 		const chunk3x3& c3x3, 
 		const chunk::block_position_type& block_position
