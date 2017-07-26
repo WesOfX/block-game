@@ -1,11 +1,15 @@
 #pragma once
 
-#include "chunk.hpp"
+#include "map.hpp"
+#include "entity.hpp"
 #include "util.hpp"
 	
 struct updater{
 	void update_sky_light(const chunk3x3& chunks) const;
 	void update_torch_light(const chunk3x3& chunks) const;
+	void update_blocks(const chunk3x3& chunks) const;
+	void update_mob(decltype(map::chunks) chunks, entity& m) const;
+	void update_player(decltype(map::chunks) chunks, entity& p) const;
 
 private:
 	enum light_type: bool{sky, torch};

@@ -289,7 +289,7 @@ int main(){
 		// sf::Texture::bind(&at.texture);
 		// sf::Texture::bind(&m.block_atlas.texture);
 		// va.bind();
-		unsigned vertex_count = 0;
+		// unsigned vertex_count = 0;
 		// for(auto& r: vbos) for(auto& c: r) vertex_count += c.vertex_count;
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 		for(size_t r = 0; r < 3; ++r){

@@ -295,7 +295,7 @@ quad modeler::generate_block_face(
 		-(face == back) + (face == front)
 	};*/
 	typedef decltype(decltype(q)::value_type::position) position_type;
-	typedef position_type::coordinate_type coordinate_type;
+	typedef position_type::coord_type coordinate_type;
 	for(auto& i: q){
 		i.position += position_type{
 			(coordinate_type)position.y, // column

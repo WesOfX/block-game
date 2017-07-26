@@ -5,9 +5,9 @@ map::~map(){
 	save();
 }
 
-void map::load_chunk(const chunk::position_type& position){
+bool map::load_chunk(const chunk::position_type& position){
 	// If the chunk is already loaded
-	if(chunks.count(position) > 0) return;
+	if(chunks.count(position) > 0) return true;
 	
 	auto filename = generate_filename(position);
 	std::ifstream fin{filename, std::ios::binary};
@@ -17,13 +17,21 @@ void map::load_chunk(const chunk::position_type& position){
 		chunk c;
 		fin >> c;
 		chunks.insert({position, c});
+		return true;
 	}
-	else{
+	else return false;
+	/*else{
 		// generate new chunk
 		chunk c;
 		gen.generate_terrain(c, position);
 		chunks.insert({position, c});
-	}
+	}*/
+}
+
+void map::generate_chunk(const chunk::position_type& position){
+	chunk c;
+	gen.generate_terrain(c, position);
+	chunks[position] = c;
 }
 
 void map::save_chunk(const chunk::position_type& position){

@@ -2,8 +2,8 @@
 
 template<class coord_t>
 struct vec3{
-	typedef coord_t coordinate_type;
-    coord_t x, y, z;
+	typedef coord_t coord_type;
+    coord_type x, y, z;
 };
 
 template<class coord_t>

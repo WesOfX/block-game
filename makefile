@@ -3,13 +3,16 @@ CFLAGS= -std=c++17 -Wall -g -O2
 LDFLAGS= -lpthread -lGLEW -lGLU -lGL -lsfml-graphics -lsfml-window -lsfml-system
 OBJS= obj/world.o obj/entity.o obj/map.o obj/chunk.o obj/block.o obj/generator.o obj/updater.o obj/scene.o obj/modeler.o obj/vbo.o obj/vao.o obj/atlas.o obj/shader.o
 
-all: bin/run bin/chunk-viewer
+all: bin/run bin/chunk-viewer bin/world-explorer
 
 bin/run: obj/main.o $(OBJS) | bin data
 	$(CC) $(CFLAGS) -o bin/run obj/main.o $(OBJS) $(LDFLAGS)
 	
 bin/chunk-viewer: obj/chunk_viewer.o $(OBJS) | bin
 	$(CC) $(CFLAGS) -o bin/chunk-viewer obj/chunk_viewer.o $(OBJS) $(LDFLAGS)
+	
+bin/world-explorer: obj/world_explorer.o $(OBJS) | bin
+	$(CC) $(CFLAGS) -o bin/world-explorer obj/world_explorer.o $(OBJS) $(LDFLAGS)
 
 obj/main.o: src/main.cpp | obj
 	$(CC) $(CFLAGS) -o obj/main.o -c src/main.cpp
@@ -55,6 +58,9 @@ obj/atlas.o: src/atlas.hpp src/atlas.cpp | obj
 
 obj/shader.o: src/shader.hpp src/shader.cpp | obj
 	$(CC) $(CFLAGS) -o obj/shader.o -c src/shader.cpp
+	
+obj/world_explorer.o: src/test/world_explorer.cpp | obj
+	$(CC) $(CFLAGS) -o obj/world_explorer.o -c src/test/world_explorer.cpp
 
 bin:
 	mkdir bin
