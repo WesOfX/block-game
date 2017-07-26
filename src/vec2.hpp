@@ -2,8 +2,8 @@
 
 template<class coord_t>
 struct vec2{
-	typedef coord_t coordinate_type;
-    coord_t x, y;
+	typedef coord_t coord_type;
+    coord_type x, y;
 };
 
 template<class coord_t>

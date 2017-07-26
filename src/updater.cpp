@@ -1,8 +1,8 @@
 #include "updater.hpp"
 
-void updater::update_sky_light(const chunk3x3& chunks) const{
-	if(!chunks[1][1]) return;
-	auto& c = chunks[1][1].value().get();
+void updater::update_sky_light(const chunk3x3& c3x3) const{
+	if(!c3x3[1][1]) return;
+	auto& c = c3x3[1][1].value().get();
 	for(size_t row = 0; row < chunk::rows; ++row){
 		for(size_t column = 0; column < chunk::columns; ++column){
 			uint8_t sky_light = 15;
@@ -18,12 +18,12 @@ void updater::update_sky_light(const chunk3x3& chunks) const{
 			}	
 		}
 	}
-	flood_all_light(chunks, sky);
+	flood_all_light(c3x3, sky);
 }
 
-void updater::update_torch_light(const chunk3x3& chunks) const{
-	if(!chunks[1][1]) return;
-	auto& c = chunks[1][1].value().get();
+void updater::update_torch_light(const chunk3x3& c3x3) const{
+	if(!c3x3[1][1]) return;
+	auto& c = c3x3[1][1].value().get();
 	for(size_t row = 0; row < chunk::rows; ++row){
 		for(size_t column = 0; column < chunk::columns; ++column){
 			for(size_t layer = 0; layer < chunk::layers; ++layer){
@@ -32,14 +32,14 @@ void updater::update_torch_light(const chunk3x3& chunks) const{
 			}
 		}
 	}	
-	flood_all_light(chunks, torch);
+	flood_all_light(c3x3, torch);
 }
 
-void updater::flood_all_light(const chunk3x3& chunks, updater::light_type lt) const{
+void updater::flood_all_light(const chunk3x3& c3x3, updater::light_type lt) const{
 	for(int16_t level = 15; level != 1; --level){
 		for(size_t c_row = 0; c_row < 3; ++c_row){
 			for(size_t c_column = 0; c_column < 3; ++c_column){
-				auto& c = chunks[c_row][c_column].value().get();
+				auto& c = c3x3[c_row][c_column].value().get();
 				for(size_t row = 0; row < chunk::rows; ++row){
 					for(size_t column = 0; column < chunk::columns; ++column){
 						for(size_t layer = 0; layer < chunk::layers; ++layer){
@@ -51,8 +51,8 @@ void updater::flood_all_light(const chunk3x3& chunks, updater::light_type lt) co
 									auto& target = c.at({row - 1, column, layer});
 									spread_light(target, level, lt);
 								}
-								else if(c_row > 0 && chunks[c_row - 1][c_column]){
-									auto& target = chunks[c_row - 1][c_column].value().get().at(
+								else if(c_row > 0 && c3x3[c_row - 1][c_column]){
+									auto& target = c3x3[c_row - 1][c_column].value().get().at(
 										{chunk::rows - 1, column, layer}
 									);
 									spread_light(target, level, lt);
@@ -61,8 +61,8 @@ void updater::flood_all_light(const chunk3x3& chunks, updater::light_type lt) co
 									auto& target = c.at({row + 1, column, layer});
 									spread_light(target, level, lt);
 								}
-								else if(c_row < 2 && chunks[c_row + 1][c_column]){
-									auto& target = chunks[c_row + 1][c_column].value().get().at(
+								else if(c_row < 2 && c3x3[c_row + 1][c_column]){
+									auto& target = c3x3[c_row + 1][c_column].value().get().at(
 										{0, column, layer}
 									);
 									spread_light(target, level, lt);
@@ -71,8 +71,8 @@ void updater::flood_all_light(const chunk3x3& chunks, updater::light_type lt) co
 									auto& target = c.at({row, column - 1, layer});
 									spread_light(target, level, lt);
 								}
-								else if(c_column > 0 && chunks[c_row][c_column - 1]){
-									auto& target = chunks[c_row][c_column - 1].value().get().at(
+								else if(c_column > 0 && c3x3[c_row][c_column - 1]){
+									auto& target = c3x3[c_row][c_column - 1].value().get().at(
 										{row, chunk::columns - 1, layer}
 									);
 									spread_light(target, level, lt);
@@ -81,8 +81,8 @@ void updater::flood_all_light(const chunk3x3& chunks, updater::light_type lt) co
 									auto& target = c.at({row, column + 1, layer});
 									spread_light(target, level, lt);
 								}
-								else if(c_column < 2 && chunks[c_row][c_column + 1]){
-									auto& target = chunks[c_row][c_column + 1].value().get().at(
+								else if(c_column < 2 && c3x3[c_row][c_column + 1]){
+									auto& target = c3x3[c_row][c_column + 1].value().get().at(
 										{row, 0, layer}
 									);
 									spread_light(target, level, lt);
@@ -102,6 +102,43 @@ void updater::flood_all_light(const chunk3x3& chunks, updater::light_type lt) co
 			}
 		}
 	}
+}
+
+void updater::update_block(
+	const chunk3x3& c3x3,
+	const chunk::block_position_type& block_position
+) const{
+	auto& block = c3x3[1][1].value().get().at(block_position);
+	switch(block.id){
+	default:
+		break;
+	}
+}
+
+void updater::update_random(const chunk3x3& c3x3){
+	typedef chunk::block_position_type block_position_type;
+	typedef std::uniform_int_distribution<
+		block_position_type::coord_type
+	> distribution;
+	
+	block_position_type random_block_position{
+		distribution(0, chunk::rows - 1)(rng),
+		distribution(0, chunk::columns - 1)(rng),
+		distribution(0, chunk::layers - 1)(rng)
+	};
+	auto& block = c3x3[1][1].value().get().at(random_block_position);
+	switch(block.id){
+	default:
+		break;
+	}
+}
+
+void updater::update_mob(decltype(map::chunks) c3x3, entity& m) const{
+	
+}
+
+void updater::update_player(decltype(map::chunks) c3x3, entity& p) const{
+	
 }
 
 void updater::spread_light(block& b, int16_t level, light_type lt) const{

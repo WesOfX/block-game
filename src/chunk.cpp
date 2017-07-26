@@ -8,23 +8,24 @@ block& chunk::at(const block_position_type& position){
 	return blocks.at(position.x).at(position.y).at(position.z);
 }
 
+bool chunk::has_updates() const{
+	return !block_updates.empty();
+}
+
 void chunk::set(const block_position_type& position, const block& b){
 	blocks.at(position.x).at(position.y).at(position.z) = b;
 }
 
-void chunk::block_update(const block_position_type& position){
-
+void chunk::push_update(const block_position_type& block_position){
+	block_updates.push(block_position);
 }
 
-void chunk::random_update(){
-	typedef std::uniform_int_distribution<
-		block_position_type::coord_type
-	> distribution;
-	block_position_type random_block_position = {
-		distribution(0, rows - 1)(rng),
-		distribution(0, columns - 1)(rng),
-		distribution(0, layers - 1)(rng)
-	};
+const chunk::block_position_type& chunk::next_update(){
+	return block_updates.front();
+}
+
+void chunk::pop_update(){
+	block_updates.pop();
 }
 
 std::ostream& operator<<(

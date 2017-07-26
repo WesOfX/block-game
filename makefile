@@ -3,21 +3,23 @@ CFLAGS= -std=c++17 -Wall -g -O2
 LDFLAGS= -lpthread -lGLEW -lGLU -lGL -lsfml-graphics -lsfml-window -lsfml-system
 OBJS= obj/world.o obj/entity.o obj/map.o obj/chunk.o obj/block.o obj/generator.o obj/updater.o obj/scene.o obj/modeler.o obj/vbo.o obj/vao.o obj/atlas.o obj/shader.o
 
-all: bin/run bin/chunk-viewer bin/world-explorer
+all: bin/world-explorer
 
-bin/run: obj/main.o $(OBJS) | bin data
-	$(CC) $(CFLAGS) -o bin/run obj/main.o $(OBJS) $(LDFLAGS)
+#all: bin/run bin/chunk-viewer bin/world-explorer
+
+#bin/run: obj/main.o $(OBJS) | bin data
+#	$(CC) $(CFLAGS) -o bin/run obj/main.o $(OBJS) $(LDFLAGS)
 	
-bin/chunk-viewer: obj/chunk_viewer.o $(OBJS) | bin
-	$(CC) $(CFLAGS) -o bin/chunk-viewer obj/chunk_viewer.o $(OBJS) $(LDFLAGS)
+#bin/chunk-viewer: obj/chunk_viewer.o $(OBJS) | bin
+#	$(CC) $(CFLAGS) -o bin/chunk-viewer obj/chunk_viewer.o $(OBJS) $(LDFLAGS)
 	
 bin/world-explorer: obj/world_explorer.o $(OBJS) | bin
 	$(CC) $(CFLAGS) -o bin/world-explorer obj/world_explorer.o $(OBJS) $(LDFLAGS)
 
-obj/main.o: src/main.cpp | obj
-	$(CC) $(CFLAGS) -o obj/main.o -c src/main.cpp
+#obj/main.o: src/main.cpp | obj
+#	$(CC) $(CFLAGS) -o obj/main.o -c src/main.cpp
 	
-obj/world.o: src/world.hpp src/world.cpp obj/entity.o obj/map.o | obj
+obj/world.o: src/world.hpp src/world.cpp obj/updater.o | obj
 	$(CC) $(CFLAGS) -o obj/world.o -c src/world.cpp
 	
 obj/entity.o: src/entity.hpp src/entity.cpp src/vec3.hpp | obj

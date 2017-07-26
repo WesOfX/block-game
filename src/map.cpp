@@ -20,12 +20,6 @@ bool map::load_chunk(const chunk::position_type& position){
 		return true;
 	}
 	else return false;
-	/*else{
-		// generate new chunk
-		chunk c;
-		gen.generate_terrain(c, position);
-		chunks.insert({position, c});
-	}*/
 }
 
 void map::generate_chunk(const chunk::position_type& position){
@@ -57,7 +51,7 @@ void map::save(){
 	for(auto& i: chunks) save_chunk(i.first);
 }
 
-std::string map::generate_filename(const chunk::position_type& position) const{
+std::string map::generate_filename(const chunk::position_type& position){
 	return {
 		"data/world/chunks/"
 	  + std::to_string(position.x) 
