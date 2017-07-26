@@ -6,7 +6,8 @@
 #include <deque>
 #include <thread>
 #include "map.hpp"
-#include "entity.hpp"
+#include "mob.hpp"
+#include "player.hpp"
 #include "updater.hpp"
 
 struct world{
@@ -23,7 +24,8 @@ struct world{
 	unsigned day_length = 5000, time_of_day = day_length / 2;
 	rng_type rng = rng_type{rng_type::default_seed};
 	map m;
-	std::vector<entity> players, mobs;
+	std::vector<player> players;
+	std::vector<mob> mobs;
 	
 	time_point // last_main_tick,
 	           last_chunk_io_tick, 

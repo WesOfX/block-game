@@ -1,7 +1,7 @@
 CC= g++
 CFLAGS= -std=c++17 -Wall -g -O2
 LDFLAGS= -lpthread -lGLEW -lGLU -lGL -lsfml-graphics -lsfml-window -lsfml-system
-OBJS= obj/world.o obj/entity.o obj/map.o obj/chunk.o obj/block.o obj/generator.o obj/updater.o obj/scene.o obj/modeler.o obj/vbo.o obj/vao.o obj/atlas.o obj/shader.o
+OBJS= obj/world.o obj/entity.o obj/mob.o obj/player.o obj/map.o obj/chunk.o obj/block.o obj/generator.o obj/updater.o obj/scene.o obj/modeler.o obj/vbo.o obj/vao.o obj/atlas.o obj/shader.o
 
 all: bin/world-explorer
 
@@ -19,11 +19,17 @@ bin/world-explorer: obj/world_explorer.o $(OBJS) | bin
 #obj/main.o: src/main.cpp | obj
 #	$(CC) $(CFLAGS) -o obj/main.o -c src/main.cpp
 	
-obj/world.o: src/world.hpp src/world.cpp obj/updater.o | obj
+obj/world.o: src/world.hpp src/world.cpp obj/updater.o obj/mob.o obj/player.o | obj
 	$(CC) $(CFLAGS) -o obj/world.o -c src/world.cpp
 	
 obj/entity.o: src/entity.hpp src/entity.cpp src/vec3.hpp | obj
 	$(CC) $(CFLAGS) -o obj/entity.o -c src/entity.cpp
+	
+obj/mob.o: src/mob.hpp src/mob.cpp src/entity.hpp | obj
+	$(CC) $(CFLAGS) -o obj/mob.o -c src/mob.cpp
+	
+obj/player.o: src/player.hpp src/player.cpp src/mob.hpp | obj
+	$(CC) $(CFLAGS) -o obj/player.o -c src/player.cpp
 
 obj/map.o: src/map.hpp src/map.cpp obj/chunk.o obj/generator.o src/util.hpp | obj
 	$(CC) $(CFLAGS) -o obj/map.o -c src/map.cpp
