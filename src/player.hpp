@@ -4,12 +4,12 @@
 #include "mob.hpp"
 
 struct player: public mob{
-	enum input_type: uint8_t{
-		forward,
-		backward,
-		left,
-		right,
-		jump,
-		prone
-	};
+	bool forward = false,
+	     backward = false,
+	     left = false,
+	     right = false,
+	     jump = false,
+	     prone = false;	     
+	
+	void update_input();
 };

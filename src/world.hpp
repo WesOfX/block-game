@@ -11,6 +11,7 @@
 #include "updater.hpp"
 
 struct world{
+	typedef std::chrono::duration<float, std::ratio<1, 500>> master_tick;
 	typedef std::chrono::duration<float, std::ratio<1, 100>> chunk_io_tick;
 	typedef std::chrono::duration<float, std::ratio<1, 10>> map_tick;
 	typedef std::chrono::duration<float, std::ratio<1, 25>> mob_tick;
@@ -27,7 +28,7 @@ struct world{
 	std::vector<player> players;
 	std::vector<mob> mobs;
 	
-	time_point // last_main_tick,
+	time_point last_master_tick,
 	           last_chunk_io_tick, 
 	           last_map_tick, 
 	           last_mob_tick, 
@@ -48,4 +49,7 @@ struct world{
 	void update_map();
 	void update_mobs();
 	void update_players();
+	
+private:
+	void join_all_threads();
 };

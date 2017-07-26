@@ -3,40 +3,37 @@
 #include "util.hpp"
 
 world::~world(){
-	if(chunk_io_thread.joinable()) chunk_io_thread.join();
+	join_all_threads();
 }
 
 void world::update(){
-	if( // if the chunk io thread isn't busy
-		!chunk_io_thread.joinable() 
-	 && clock::now() - last_chunk_io_tick > chunk_io_tick(1.0f)
-	)
+	// if(clock::now() - last_master_tick > master_tick(1.0f)){
+	std::this_thread::sleep_for(
+		master_tick(1.0f) - (clock::now() - last_master_tick)
+	);
+	if(clock::now() - last_chunk_io_tick > chunk_io_tick(1.0f)){
 		chunk_io_thread = std::thread(&world::update_chunk_io, this);
-	else chunk_io_thread.join();
-	
-	if( // if the map thread isn't busy
-		!map_thread.joinable() 
-	 && clock::now() - last_map_tick > map_tick(1.0f)
-	)
+		last_chunk_io_tick = clock::now();
+	}
+	if(clock::now() - last_map_tick > map_tick(1.0f)){
 		map_thread = std::thread(&world::update_map, this);
-	else map_thread.join();
-	
-	if( // if the mob thread isn't busy
-		!mob_thread.joinable() 
-	 && clock::now() - last_mob_tick > mob_tick(1.0f)
-	)
+		last_map_tick = clock::now();
+	}
+	if(clock::now() - last_mob_tick > mob_tick(1.0f)){
 		mob_thread = std::thread(&world::update_mobs, this);
-	else mob_thread.join();
-	
-	if( // if the player thread isn't busy
-		!player_thread.joinable() 
-	 && clock::now() - last_player_tick > player_tick(1.0f)
-	)
+		last_mob_tick = clock::now();
+	}
+	if(clock::now() - last_player_tick > player_tick(1.0f)){
 		player_thread = std::thread(&world::update_players, this);
-	else player_thread.join();
+		last_player_tick = clock::now();
+	}
+	last_master_tick = clock::now();
+	// }	
+	join_all_threads();
 }
 
 void world::update_chunk_io(){
+	// std::cout << "update chunk io" << std::endl; // TODO REMOVE
 	for(auto& player: players){
 		// if(!chunk_io_thread.joinable()){ // If the thread is not busy
 		for( // For any chunk in range (manhattan distance)
@@ -100,18 +97,28 @@ void world::update_chunk_io(){
 }
 
 void world::update_map(){
+	// std::cout << "update map" << std::endl; // TODO REMOVE
 	++time_of_day;
 	upd.update_map(m);
 }
 
 void world::update_mobs(){
+	// std::cout << "update mobs" << std::endl; // TODO REMOVE
 	for(auto& i: mobs){
 		i.update();
 	}
 }
 
 void world::update_players(){
+	// std::cout << "update players" << std::endl; // TODO REMOVE
 	for(auto& i: players){
 		i.update();
 	}
+}
+
+void world::join_all_threads(){
+	if(chunk_io_thread.joinable()) chunk_io_thread.join();
+	if(map_thread.joinable()) map_thread.join();
+	if(mob_thread.joinable()) mob_thread.join();
+	if(player_thread.joinable()) player_thread.join();
 }
