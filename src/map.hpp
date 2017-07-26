@@ -12,6 +12,7 @@ struct map{
 	
 	~map();
 	
+	// loads chunk if a file exists. generates a new chunk if not
 	bool load_chunk(const chunk::position_type& position);
 	void generate_chunk(const chunk::position_type& position);
 	void save_chunk(const chunk::position_type& position);

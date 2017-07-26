@@ -16,10 +16,13 @@ bool map::load_chunk(const chunk::position_type& position){
 		// load chunk from file
 		chunk c;
 		fin >> c;
-		chunks.insert({position, c});
+		chunks[position] = c;
 		return true;
 	}
-	else return false;
+	else{ 
+		generate_chunk(position);
+		return false;
+	}
 }
 
 void map::generate_chunk(const chunk::position_type& position){
@@ -48,7 +51,10 @@ void map::unload_chunk(const chunk::position_type& position){
 }
 
 void map::save(){
-	for(auto& i: chunks) save_chunk(i.first);
+	for(auto& i: chunks){ 
+		save_chunk(i.first);
+		unload_chunk(i.first);
+	}
 }
 
 std::string map::generate_filename(const chunk::position_type& position){

@@ -11,17 +11,17 @@
 #include "updater.hpp"
 
 struct world{
-	typedef std::chrono::duration<float, std::ratio<1, 500>> master_tick;
-	typedef std::chrono::duration<float, std::ratio<1, 100>> chunk_io_tick;
-	typedef std::chrono::duration<float, std::ratio<1, 10>> map_tick;
-	typedef std::chrono::duration<float, std::ratio<1, 25>> mob_tick;
-	typedef std::chrono::duration<float, std::ratio<1, 50>> player_tick;
+	typedef std::chrono::duration<float, std::ratio<1, 120>> master_tick;
+	typedef std::chrono::duration<float, std::ratio<1, 60>> chunk_io_tick;
+	typedef std::chrono::duration<float, std::ratio<1, 15>> map_tick;
+	typedef std::chrono::duration<float, std::ratio<1, 15>> mob_tick;
+	typedef std::chrono::duration<float, std::ratio<1, 60>> player_tick;
 	typedef std::chrono::steady_clock clock;
 	typedef std::chrono::time_point<clock> time_point;
 	typedef std::default_random_engine rng_type;
 
-	float chunk_loading_distance = 8;
-	size_t chunk_limit = pow(chunk_loading_distance * M_PI, 2) * 7; // (pi * r) ^ 2
+	float chunk_loading_distance = 8.0f;
+	size_t chunk_limit = powf(chunk_loading_distance * M_PI, 2) * 7; // (pi * r) ^ 2
 	unsigned day_length = 5000, time_of_day = day_length / 2;
 	rng_type rng = rng_type{rng_type::default_seed};
 	map m;

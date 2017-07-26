@@ -7,7 +7,6 @@ world::~world(){
 }
 
 void world::update(){
-	// if(clock::now() - last_master_tick > master_tick(1.0f)){
 	std::this_thread::sleep_for(
 		master_tick(1.0f) - (clock::now() - last_master_tick)
 	);
@@ -28,14 +27,11 @@ void world::update(){
 		last_player_tick = clock::now();
 	}
 	last_master_tick = clock::now();
-	// }	
 	join_all_threads();
 }
 
 void world::update_chunk_io(){
-	// std::cout << "update chunk io" << std::endl; // TODO REMOVE
 	for(auto& player: players){
-		// if(!chunk_io_thread.joinable()){ // If the thread is not busy
 		for( // For any chunk in range (manhattan distance)
 			int row = -chunk_loading_distance; 
 			row < chunk_loading_distance; 
@@ -71,6 +67,7 @@ void world::update_chunk_io(){
 		}
 	}
 	if(!chunk_loading_queue.empty()){
+		// TODO if(chunks.size() == max_loaded_chunks) unload most distant chunk
 		auto &player = players.at(
 			std::uniform_int_distribution<size_t>(0, players.size() - 1)(rng)
 		);
@@ -97,20 +94,17 @@ void world::update_chunk_io(){
 }
 
 void world::update_map(){
-	// std::cout << "update map" << std::endl; // TODO REMOVE
 	++time_of_day;
 	upd.update_map(m);
 }
 
 void world::update_mobs(){
-	// std::cout << "update mobs" << std::endl; // TODO REMOVE
 	for(auto& i: mobs){
 		i.update();
 	}
 }
 
 void world::update_players(){
-	// std::cout << "update players" << std::endl; // TODO REMOVE
 	for(auto& i: players){
 		i.update();
 	}

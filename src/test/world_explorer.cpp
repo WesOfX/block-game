@@ -4,6 +4,8 @@
 world w;
 
 int main(){
+	w.players.emplace_back();
+
 	sf::RenderWindow window(
 		sf::VideoMode(800, 600), 
 		"Block Game",
@@ -29,12 +31,8 @@ int main(){
 			}
 		}
 		
-		try{
-			w.update();
-		}
-		catch(const std::exception& e){
-			// std::cout << e.what() << std::endl;
-		}
+		w.update();
+		std::cout << "chunks loaded: " << w.m.chunks.size() << std::endl;
 		
 		window.clear();
 		window.display();
