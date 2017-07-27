@@ -8,8 +8,12 @@
 #include "util.hpp"
 
 struct scene: public sf::Drawable{
+	float render_distance = 8.0f;
+	size_t chunk_model_limit = pow(render_distance * M_PI, 2) * 2; 
 	modeler chunk_modeler;
 	std::unordered_map<chunk::position_type, model> chunk_models;
+	std::deque<chunk::position_type> model_loading_queue;
+	std::thread model_thread;
 	/*void update_chunk_models(
 		const chunk::position_type& position, 
 		const chunk& c

@@ -80,7 +80,7 @@ void world::start_chunk_io(){
 				}
 			);
 			m.load_chunk(*closest_unloaded_chunk);
-			chunk_loading_queue.erase(closest_unloaded_chunk);
+			// chunk_loading_queue.erase(closest_unloaded_chunk);
 		}
 		chunk_loading_queue.clear(); // Remakes the queue every tick!
 		last_chunk_io_tick = clock::now();

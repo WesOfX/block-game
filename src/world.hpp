@@ -21,7 +21,7 @@ struct world{
 	typedef std::default_random_engine rng_type;
 
 	float chunk_loading_distance = 8.0f;
-	size_t chunk_limit = powf(chunk_loading_distance * M_PI, 2) * 7; // (pi * r) ^ 2
+	size_t chunk_limit = pow(chunk_loading_distance * M_PI, 2) * 2; // (pi * r) ^ 2
 	unsigned day_length = 5000, time_of_day = day_length / 2;
 	rng_type rng = rng_type{rng_type::default_seed};
 	map m;
