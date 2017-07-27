@@ -1,7 +1,7 @@
 CC= g++
 CFLAGS= -std=c++17 -Wall -g -O2
 LDFLAGS= -lpthread -lGLEW -lGLU -lGL -lsfml-graphics -lsfml-window -lsfml-system
-OBJS= obj/world.o obj/entity.o obj/mob.o obj/player.o obj/map.o obj/chunk.o obj/block.o obj/generator.o obj/updater.o obj/scene.o obj/modeler.o obj/vbo.o obj/vao.o obj/atlas.o obj/shader.o
+OBJS= obj/world.o obj/entity.o obj/mob.o obj/player.o obj/map.o obj/chunk.o obj/block.o obj/generator.o obj/updater.o obj/scene.o obj/modeler.o obj/vbo.o obj/vao.o obj/atlas.o obj/shader.o obj/controller.o
 
 all: bin/world-explorer
 
@@ -67,8 +67,11 @@ obj/atlas.o: src/atlas.hpp src/atlas.cpp | obj
 obj/shader.o: src/shader.hpp src/shader.cpp | obj
 	$(CC) $(CFLAGS) -o obj/shader.o -c src/shader.cpp
 	
-obj/world_explorer.o: src/test/world_explorer.cpp obj/world.o obj/scene.o | obj
+obj/world_explorer.o: src/test/world_explorer.cpp obj/world.o obj/scene.o obj/controller.o | obj
 	$(CC) $(CFLAGS) -o obj/world_explorer.o -c src/test/world_explorer.cpp
+
+obj/controller.o: src/controller.cpp src/controller.hpp src/world.hpp |obj
+	$(CC) $(CFLAGS) -o obj/controller.o -c src/controller.cpp
 
 bin:
 	mkdir bin

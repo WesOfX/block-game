@@ -305,7 +305,7 @@ quad modeler::generate_block_face(
 		i.position.z += chunk_position.x * chunk::columns;
 		i.position.x += chunk_position.y * chunk::rows;
 	}
-	auto uv_q{block_atlas.get_uv(atlas_position(b.id, face))};
+	auto uv_q{block_atlas.get_uv(atlas_position((block::id_type)b.id, face))};
 	for(auto i = 0; i < 4; ++i) q[i].uv = uv_q[i];
 	return q;
 }

@@ -1,15 +1,18 @@
 #include <SFML/Graphics.hpp>
 #include "../world.hpp"
 #include "../scene.hpp"
-
-world w;
-scene s;
+#include "../controller.hpp"
 
 int main(){
+	world w;
+	// scene s;
+	controller c;
+
+	c.load_bindings();
 	w.players.emplace_back();	
 	
-	std::cout << "size of block: " << sizeof(block) << std::endl;
-	std::cout << "size of chunk: " << sizeof(chunk) << std::endl;
+	// std::cout << "size of block: " << sizeof(block) << std::endl;
+	// std::cout << "size of chunk: " << sizeof(chunk) << std::endl;
 
 	sf::RenderWindow window(
 		sf::VideoMode(800, 600), 
@@ -35,12 +38,14 @@ int main(){
 			default:
 				break;
 			}
+			c.update(w, e);
 		}
 				
-		s.update(w);
+		// std::cout << "chunks loaded: " << w.m.chunks.size() << std::endl;
+		// s.update(w);
 		
 		window.clear();
-		window.draw(s);
+		// window.draw(s);
 		window.display();
 	}
 }

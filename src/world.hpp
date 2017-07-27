@@ -52,6 +52,6 @@ struct world{
 	void start_player_updates();
 	
 private:
-	bool running = true;
+	bool running;
 	void join_all_threads();
 };

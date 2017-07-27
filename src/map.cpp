@@ -31,7 +31,7 @@ void map::generate_chunk(const chunk::position_type& position){
 	chunks[position] = c;
 }
 
-void map::save_chunk(const chunk::position_type& position){
+void map::save_chunk(const chunk::position_type& position) const{
 	// If the chunk doesn't exist
 	if(chunks.find(position) == chunks.end()) return;
 	
@@ -50,7 +50,7 @@ void map::unload_chunk(const chunk::position_type& position){
 	chunks.erase(position);
 }
 
-void map::save(){
+void map::save() const{
 	for(auto& i: chunks){ 
 		save_chunk(i.first);
 		// unload_chunk(i.first); // Causes segmentation fault

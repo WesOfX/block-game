@@ -16,11 +16,11 @@ struct map{
 	// loads chunk if a file exists. generates a new chunk if not
 	bool load_chunk(const chunk::position_type& position);
 	void generate_chunk(const chunk::position_type& position);
-	void save_chunk(const chunk::position_type& position);
+	void save_chunk(const chunk::position_type& position) const;
 	void unload_chunk(const chunk::position_type& position);
 	
 	// saves all the chunks
-	void save();
+	void save() const;
 	
 private:
 	static std::string generate_filename(const chunk::position_type& position);

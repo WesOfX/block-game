@@ -13,8 +13,8 @@ struct block{
 		fire
 	};
 	
-	id_type id = air;
-	uint8_t torch_light:4, sky_light:4;
+	id_type id;
+	uint8_t /*meta:4,*/ torch_light:4, sky_light:4; 
 	
 	bool visible() const;
 	uint8_t opacity() const;
