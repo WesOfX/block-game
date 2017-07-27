@@ -53,7 +53,7 @@ void map::unload_chunk(const chunk::position_type& position){
 void map::save(){
 	for(auto& i: chunks){ 
 		save_chunk(i.first);
-		unload_chunk(i.first);
+		// unload_chunk(i.first); // Causes segmentation fault
 	}
 }
 

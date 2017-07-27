@@ -5,6 +5,10 @@ world w;
 
 int main(){
 	w.players.emplace_back();
+	w.update();
+	
+	std::cout << "size of block: " << sizeof(block) << std::endl;
+	std::cout << "size of chunk: " << sizeof(chunk) << std::endl;
 
 	sf::RenderWindow window(
 		sf::VideoMode(800, 600), 
@@ -18,6 +22,7 @@ int main(){
 			3
 		)
 	);
+	window.setVerticalSyncEnabled(true);
 	
 	while(window.isOpen()){
 		sf::Event e;
@@ -30,8 +35,7 @@ int main(){
 				break;
 			}
 		}
-		
-		w.update();
+
 		std::cout << "chunks loaded: " << w.m.chunks.size() << std::endl;
 		
 		window.clear();

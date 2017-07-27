@@ -8,12 +8,12 @@
 #include "block.hpp"
 
 struct chunk{
-	typedef vec2<size_t> position_type;
+	typedef vec2<ptrdiff_t> position_type;
 	typedef position_type::coord_type coord_type;
 	typedef vec3<size_t> block_position_type;
 	typedef block_position_type::coord_type block_coord_type;
 	
-	static constexpr block_coord_type rows = 16, columns = 16, layers = 64;
+	static constexpr block_coord_type rows = 16, columns = 16, layers = 256;
 	
 	const block& get(const block_position_type& position) const;
 	block& at(const block_position_type& position);

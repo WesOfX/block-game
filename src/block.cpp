@@ -36,6 +36,8 @@ std::ostream& operator<<(
 	const block& b
 ){
 	os << (unsigned char)b.id;
+	os << (unsigned char)b.torch_light;
+	os << (unsigned char)b.sky_light;
 	return os;
 }
 
@@ -44,5 +46,7 @@ std::istream& operator>>(
 	block& b
 ){
 	b.id = (block::id_type)is.get();
+	b.torch_light = is.get();
+	b.sky_light = is.get();
 	return is;
 }

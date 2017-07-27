@@ -13,7 +13,7 @@ all: bin/world-explorer
 #bin/chunk-viewer: obj/chunk_viewer.o $(OBJS) | bin
 #	$(CC) $(CFLAGS) -o bin/chunk-viewer obj/chunk_viewer.o $(OBJS) $(LDFLAGS)
 	
-bin/world-explorer: obj/world_explorer.o $(OBJS) | bin
+bin/world-explorer: obj/world_explorer.o $(OBJS) | bin data
 	$(CC) $(CFLAGS) -o bin/world-explorer obj/world_explorer.o $(OBJS) $(LDFLAGS)
 
 #obj/main.o: src/main.cpp | obj
