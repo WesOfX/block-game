@@ -9,6 +9,7 @@
 struct map{
 	generator gen = {};
 	std::unordered_map<chunk::position_type, chunk> chunks;
+	std::queue<chunk::position_type> chunk_updates;
 	
 	~map();
 	

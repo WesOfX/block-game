@@ -49,7 +49,7 @@ obj/updater.o: src/updater.hpp src/updater.cpp obj/chunk.o | obj
 obj/chunk_viewer.o: src/test/chunk_viewer.cpp obj/modeler.o obj/generator.o obj/updater.o obj/vbo.o obj/vao.o obj/atlas.o obj/shader.o | obj
 	$(CC) $(CFLAGS) -o obj/chunk_viewer.o -c src/test/chunk_viewer.cpp
 	
-obj/scene.o: src/scene.hpp src/scene.cpp obj/modeler.o | obj
+obj/scene.o: src/scene.hpp src/scene.cpp obj/map.o obj/modeler.o | obj
 	$(CC) $(CFLAGS) -o obj/scene.o -c src/scene.cpp
 	
 obj/vbo.o: src/vbo.hpp src/vbo.cpp obj/modeler.o | obj
@@ -67,7 +67,7 @@ obj/atlas.o: src/atlas.hpp src/atlas.cpp | obj
 obj/shader.o: src/shader.hpp src/shader.cpp | obj
 	$(CC) $(CFLAGS) -o obj/shader.o -c src/shader.cpp
 	
-obj/world_explorer.o: src/test/world_explorer.cpp | obj
+obj/world_explorer.o: src/test/world_explorer.cpp obj/world.o obj/scene.o | obj
 	$(CC) $(CFLAGS) -o obj/world_explorer.o -c src/test/world_explorer.cpp
 
 bin:

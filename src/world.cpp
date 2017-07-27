@@ -2,24 +2,23 @@
 #include "world.hpp"
 #include "util.hpp"
 
+world::world(){
+	run();
+}
+
 world::~world(){
 	running = false;
 	join_all_threads();
 }
 
-void world::update(){
-	/*std::this_thread::sleep_for(
-		master_tick(1.0f) - (clock::now() - last_master_tick)
-	);*/
-	chunk_io_thread = std::thread(&world::update_chunk_io, this);
-	map_thread = std::thread(&world::update_map, this);
-	mob_thread = std::thread(&world::update_mobs, this);
-	player_thread = std::thread(&world::update_players, this);
-	// last_master_tick = clock::now();
-	// join_all_threads();
+void world::run(){
+	chunk_io_thread = std::thread(&world::start_chunk_io, this);
+	map_thread = std::thread(&world::start_map_updates, this);
+	mob_thread = std::thread(&world::start_mob_updates, this);
+	player_thread = std::thread(&world::start_player_updates, this);
 }
 
-void world::update_chunk_io(){
+void world::start_chunk_io(){
 	while(running){
 		std::this_thread::sleep_for(
 			chunk_io_tick(1.0f) - (clock::now() - last_chunk_io_tick)
@@ -88,7 +87,7 @@ void world::update_chunk_io(){
 	}
 }
 
-void world::update_map(){
+void world::start_map_updates(){
 	while(running){
 		std::this_thread::sleep_for(
 			map_tick(1.0f) - (clock::now() - last_map_tick)
@@ -99,7 +98,7 @@ void world::update_map(){
 	}
 }
 
-void world::update_mobs(){
+void world::start_mob_updates(){
 	while(running){
 		std::this_thread::sleep_for(
 			mob_tick(1.0f) - (clock::now() - last_mob_tick)
@@ -111,7 +110,7 @@ void world::update_mobs(){
 	}
 }
 
-void world::update_players(){
+void world::start_player_updates(){
 	while(running){
 		for(auto& i: players){
 			i.update();

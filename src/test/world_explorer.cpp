@@ -1,11 +1,12 @@
 #include <SFML/Graphics.hpp>
 #include "../world.hpp"
+#include "../scene.hpp"
 
 world w;
+scene s;
 
 int main(){
-	w.players.emplace_back();
-	w.update();
+	w.players.emplace_back();	
 	
 	std::cout << "size of block: " << sizeof(block) << std::endl;
 	std::cout << "size of chunk: " << sizeof(chunk) << std::endl;
@@ -35,10 +36,11 @@ int main(){
 				break;
 			}
 		}
-
-		std::cout << "chunks loaded: " << w.m.chunks.size() << std::endl;
+				
+		s.update(w);
 		
 		window.clear();
+		window.draw(s);
 		window.display();
 	}
 }
