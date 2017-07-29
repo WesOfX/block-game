@@ -98,7 +98,7 @@ void scene::draw(sf::RenderTarget& target, sf::RenderStates states) const{
 	
 	glm::mat4 view = glm::lookAt(
 		glm::vec3(player.position.x, player.position.y, player.position.z),
-		glm::vec3(player.position.x, player.position.y, player.position.z + 1),
+		glm::vec3(player.position.x - 3, player.position.y - 1, player.position.z),
 		glm::vec3(0, 1, 0)
 	);
 	
@@ -128,7 +128,7 @@ void scene::draw(sf::RenderTarget& target, sf::RenderStates states) const{
 				  		player.position.x / chunk::columns + column
 				  	),
 				  	(chunk::position_type::coord_type)(
-				  		player.position.y / chunk::rows + row
+				  		player.position.z / chunk::rows + row
 				  	)
 				};
 				if(chunk_models.find(chunk_position) != chunk_models.end()){

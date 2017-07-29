@@ -4,16 +4,16 @@ const block& chunk::get(const block_position_type& position) const{
 	return blocks.at(position.x).at(position.y).at(position.z);
 }
 
+void chunk::set(const block_position_type& position, const block& b){
+	blocks.at(position.x).at(position.y).at(position.z) = b;
+}
+
 block& chunk::at(const block_position_type& position){
 	return blocks.at(position.x).at(position.y).at(position.z);
 }
 
 bool chunk::has_updates() const{
 	return !block_updates.empty();
-}
-
-void chunk::set(const block_position_type& position, const block& b){
-	blocks.at(position.x).at(position.y).at(position.z) = b;
 }
 
 void chunk::push_update(const block_position_type& block_position){

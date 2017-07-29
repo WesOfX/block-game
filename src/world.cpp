@@ -15,8 +15,8 @@ void world::run(){
 	running = true;
 	chunk_io_thread = std::thread(&world::start_chunk_io, this);
 	map_thread = std::thread(&world::start_map_updates, this);
-	// mob_thread = std::thread(&world::start_mob_updates, this);
-	// player_thread = std::thread(&world::start_player_updates, this);
+	mob_thread = std::thread(&world::start_mob_updates, this);
+	player_thread = std::thread(&world::start_player_updates, this);
 }
 
 void world::start_chunk_io(){

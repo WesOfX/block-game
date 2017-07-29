@@ -47,10 +47,10 @@ void push_unloaded_chunks_in_range(
 			if(std::hypot(row, column) < range){
 				chunk::position_type chunk_position{
 					(chunk::position_type::coord_type)(
-				  		position.x / chunk::columns + column
+				  		position.x / chunk::rows + row
 				  	),
 				  	(chunk::position_type::coord_type)(
-				  		position.z / chunk::rows + row
+				  		position.z / chunk::columns + column
 				  	)
 				};
 				if(map.find(chunk_position) == map.end()

@@ -107,26 +107,32 @@ void updater::flood_all_light(const chunk3x3& c3x3, updater::light_type lt) cons
 }
 
 void updater::update_map(map& m) const{
-	for(auto& chunk: m.chunks){ // pair<chunk position, chunk>
-		chunk3x3 c3x3;
-		for(auto r = 0; r < 3; ++r){
-			for(auto c = 0; c < 3; ++c){
-				chunk::position_type p{
-					chunk.first.x + c - 1,
-					chunk.first.y + r - 1
-				};
-				if(m.chunks.find(p) != m.chunks.end())
-					c3x3[r][c] = m.chunks[p];
-				else
-					c3x3[r][c] = {};
+	while(m.has_updates()){ // pair<chunk position, chunk>
+		auto chunk_position = m.next_update();
+		m.pop_update();
+		auto chunk_it = m.chunks.find(chunk_position);
+		auto& chunk = chunk_it->second;
+		if(chunk_it != m.chunks.end()){
+			chunk3x3 c3x3;
+			for(auto r = 0; r < 3; ++r){
+				for(auto c = 0; c < 3; ++c){
+					chunk::position_type p{
+						chunk_position.x + c - 1,
+						chunk_position.y + r - 1
+					};
+					if(m.chunks.find(p) != m.chunks.end())
+						c3x3[r][c] = m.chunks[p];
+					else
+						c3x3[r][c] = {};
+				}
 			}
+			while(chunk.has_updates()){
+				update_block(c3x3, chunk.next_update());
+				chunk.pop_update();
+			}
+			update_sky_light(c3x3);
+			update_torch_light(c3x3);
 		}
-		while(chunk.second.has_updates()){
-			update_block(c3x3, chunk.second.next_update());
-			chunk.second.pop_update();
-		}
-		update_sky_light(c3x3);
-		update_torch_light(c3x3);
 	}
 }
 

@@ -13,11 +13,11 @@ struct chunk{
 	typedef vec3<size_t> block_position_type;
 	typedef block_position_type::coord_type block_coord_type;
 	
-	static constexpr block_coord_type rows = 16, columns = 16, layers = 256;
+	static constexpr block_coord_type rows = 16, columns = 16, layers = 128;
 	
 	const block& get(const block_position_type& position) const;
-	block& at(const block_position_type& position);
 	void set(const block_position_type& position, const block& b);
+	block& at(const block_position_type& position);
 	
 	bool has_updates() const;
 	void push_update(const block_position_type& block_position);

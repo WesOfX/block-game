@@ -11,6 +11,8 @@ bool map::load_chunk(const chunk::position_type& position){
 	
 	auto filename = generate_filename(position);
 	std::ifstream fin{filename, std::ios::binary};
+
+	push_update(position);
 	// If the file is good and it's not empty
 	if(fin && fin.peek() != std::ifstream::traits_type::eof()){
 		// load chunk from file
@@ -55,6 +57,22 @@ void map::save() const{
 		save_chunk(i.first);
 		// unload_chunk(i.first); // Causes segmentation fault
 	}
+}
+
+bool map::has_updates() const{
+	return !chunk_updates.empty();
+}
+
+void map::push_update(const chunk::position_type& chunk_position){
+	chunk_updates.push(chunk_position);
+}
+
+const chunk::position_type& map::next_update(){
+	return chunk_updates.front();
+}
+
+void map::pop_update(){
+	chunk_updates.pop();
 }
 
 std::string map::generate_filename(const chunk::position_type& position){

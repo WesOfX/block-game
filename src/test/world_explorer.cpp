@@ -8,7 +8,7 @@ int main(){
 	// std::cout << "size of chunk: " << sizeof(chunk) << std::endl;
 
 	sf::RenderWindow window(
-		sf::VideoMode(800, 600), 
+		sf::VideoMode(1600, 900), 
 		"Block Game",
 		sf::Style::Default,
 		sf::ContextSettings(
@@ -39,7 +39,8 @@ int main(){
 	player p;
 
 	c.load_bindings();
-	p.position.y = -5.0f;
+	p.position = {8.0, 160.0f, 8.0f};
+	p.velocity = {-1.0f / 16, 0.0f, 1.0f / 64};
 	w.players.push_back(std::move(p));
 	
 	while(window.isOpen()){
@@ -55,6 +56,7 @@ int main(){
 			c.update(w, e);
 		}
 				
+		std::cout << "player x: " << w.players.back().position.x << std::endl;
 		std::cout << "chunks loaded: " << w.m.chunks.size() << std::endl;
 		std::cout << "models loaded: " << s.chunk_models.size() << std::endl;
 		s.update();

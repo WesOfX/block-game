@@ -12,11 +12,11 @@
 
 struct scene: public sf::Drawable{
 	const world& w;
-	float render_distance = 8.0f;
+	float render_distance = 32.0f;
 	size_t chunk_model_limit = pow(render_distance * M_PI, 2) * 2; 
 	modeler chunk_modeler;
 	std::unordered_map<chunk::position_type, vbo> chunk_models;
-	float fov = 70.0f;
+	float fov = 100.0f;
 	std::deque<chunk::position_type> model_loading_queue;
 	std::thread model_thread;
 	shader scene_shader;
