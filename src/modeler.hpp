@@ -26,7 +26,7 @@ struct modeler{
 	// bool smooth_lighting;
 	modeler();
 	model generate_chunk_model(
-		const chunk3x3& chunks,
+		const const_chunk3x3& chunks,
 		const chunk::position_type& position = {0, 0}
 	) const;
 	quad generate_block_face(

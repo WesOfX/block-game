@@ -12,6 +12,7 @@ struct vbo{
 	GLuint id;
 	vao va;
 	size_t vertex_count;
-	void load_from_model(const model& m, usage u);
-	void bind();
+	vbo(const model& m, usage u = dynamic_draw);
+	void load_from_model(const model& m, usage u = dynamic_draw);
+	void bind() const;
 };

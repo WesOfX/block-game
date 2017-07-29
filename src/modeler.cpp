@@ -1,23 +1,16 @@
 #include "modeler.hpp"
 
-modeler::modeler():
-	block_atlas("textures/blocks.png", 16, 1)
-{
-	/*block_atlas.rows = 16;
-	block_atlas.columns = 16;
-	block_atlas.texture.loadFromFile("textures/blocks.png");
-	block_atlas.texture.setSmooth(false);
-	block_atlas.texture.setRepeated(false);
-	*/
-	//block_atlas.texture.generateMipmap();
+modeler::modeler(){
+	// block_atlas = atlas("textures/blocks.png", 16, 1);
 }
 
 model modeler::generate_chunk_model(
-	const chunk3x3& chunks,
+	const const_chunk3x3& chunks,
 	const chunk::position_type& position
 ) const{
 	model m;
-	auto& c = chunks[1][1].value().get();
+	if(!chunks[1][1]) return {};
+	const auto& c = chunks[1][1].value().get();
 	/*auto& west_chunk = chunks[1][0].value().get();
 	auto& east_chunk = chunks[1][2].value().get();
 	auto& north_chunk = chunks[0][1].value().get();

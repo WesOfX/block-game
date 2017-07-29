@@ -5,6 +5,6 @@ void vao::load(){
 	glBindVertexArray(id);
 }
 
-void vao::bind(){
+void vao::bind() const{
 	glBindVertexArray(id);
 }

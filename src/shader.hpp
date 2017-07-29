@@ -8,7 +8,7 @@ struct shader{
 		const std::string& vertex_shader_filename,
 		const std::string& fragment_shader_filename
 	);
-	void bind();
+	void bind() const;
 	GLuint get_id() const;
 private:
 	GLuint id, vertex_shader_id, fragment_shader_id;

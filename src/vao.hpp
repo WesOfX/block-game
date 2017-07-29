@@ -5,5 +5,5 @@
 struct vao{
 	GLuint id;
 	void load();
-	void bind();
+	void bind() const;
 };

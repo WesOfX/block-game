@@ -81,7 +81,7 @@ void shader::link_shaders(){
 	}
 }
 
-void shader::bind(){
+void shader::bind() const{
 	glUseProgram(id);
 }
 

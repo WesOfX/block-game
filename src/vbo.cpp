@@ -1,6 +1,10 @@
 #include "vbo.hpp"
 
-void vbo::load_from_model(const model& m, vbo::usage u){
+vbo::vbo(const model& m, usage u){
+	load_from_model(m, u);
+}
+
+void vbo::load_from_model(const model& m, usage u){
 	vertex_count = m.vertices.size();
 	glGenBuffers(1, &id);
 	glBindBuffer(GL_ARRAY_BUFFER, id);
@@ -71,7 +75,7 @@ void vbo::load_from_model(const model& m, vbo::usage u){
 	glEnableVertexAttribArray(0);
 }
 
-void vbo::bind(){
+void vbo::bind() const{
 	glBindBuffer(GL_ARRAY_BUFFER, id);
 	va.bind();
 }

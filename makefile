@@ -1,7 +1,7 @@
 CC= g++
 CFLAGS= -std=c++17 -Wall -g -O2
 LDFLAGS= -lpthread -lGLEW -lGLU -lGL -lsfml-graphics -lsfml-window -lsfml-system
-OBJS= obj/world.o obj/entity.o obj/mob.o obj/player.o obj/map.o obj/chunk.o obj/block.o obj/generator.o obj/updater.o obj/scene.o obj/modeler.o obj/vbo.o obj/vao.o obj/atlas.o obj/shader.o obj/controller.o
+OBJS= obj/world.o obj/entity.o obj/mob.o obj/player.o obj/map.o obj/chunk.o obj/block.o obj/generator.o obj/updater.o obj/scene.o obj/modeler.o obj/vbo.o obj/vao.o obj/atlas.o obj/shader.o obj/controller.o obj/view.o
 
 all: bin/world-explorer
 
@@ -49,7 +49,7 @@ obj/updater.o: src/updater.hpp src/updater.cpp obj/chunk.o | obj
 obj/chunk_viewer.o: src/test/chunk_viewer.cpp obj/modeler.o obj/generator.o obj/updater.o obj/vbo.o obj/vao.o obj/atlas.o obj/shader.o | obj
 	$(CC) $(CFLAGS) -o obj/chunk_viewer.o -c src/test/chunk_viewer.cpp
 	
-obj/scene.o: src/scene.hpp src/scene.cpp obj/map.o obj/modeler.o | obj
+obj/scene.o: src/scene.hpp src/scene.cpp obj/map.o obj/modeler.o obj/vbo.o obj/shader.o obj/view.o | obj
 	$(CC) $(CFLAGS) -o obj/scene.o -c src/scene.cpp
 	
 obj/vbo.o: src/vbo.hpp src/vbo.cpp obj/modeler.o | obj
@@ -70,8 +70,11 @@ obj/shader.o: src/shader.hpp src/shader.cpp | obj
 obj/world_explorer.o: src/test/world_explorer.cpp obj/world.o obj/scene.o obj/controller.o | obj
 	$(CC) $(CFLAGS) -o obj/world_explorer.o -c src/test/world_explorer.cpp
 
-obj/controller.o: src/controller.cpp src/controller.hpp src/world.hpp |obj
+obj/controller.o: src/controller.cpp src/controller.hpp src/world.hpp | obj
 	$(CC) $(CFLAGS) -o obj/controller.o -c src/controller.cpp
+	
+obj/view.o: src/view.cpp src/view.hpp src/world.hpp | obj
+	$(CC) $(CFLAGS) -o obj/view.o -c src/view.cpp
 
 bin:
 	mkdir bin

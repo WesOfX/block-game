@@ -5,26 +5,24 @@
 #include <SFML/Graphics/Drawable.hpp>
 #include "world.hpp"
 #include "modeler.hpp"
+#include "vbo.hpp"
+#include "shader.hpp"
+#include "view.hpp"
 #include "util.hpp"
 
 struct scene: public sf::Drawable{
+	const world& w;
 	float render_distance = 8.0f;
 	size_t chunk_model_limit = pow(render_distance * M_PI, 2) * 2; 
 	modeler chunk_modeler;
-	std::unordered_map<chunk::position_type, model> chunk_models;
+	std::unordered_map<chunk::position_type, vbo> chunk_models;
+	float fov = 70.0f;
 	std::deque<chunk::position_type> model_loading_queue;
 	std::thread model_thread;
-	/*void update_chunk_models(
-		const chunk::position_type& position, 
-		const chunk& c
-		// const chunk::block_position_type& updated_block
-	);*/
+	shader scene_shader;
+	GLuint mvp_id, sampler_id;
 		
-	void update(const world& w);
+	scene(const world& w);
+	void update();
 	void draw(sf::RenderTarget& target, sf::RenderStates states) const;
-	
-	void set_map(std::shared_ptr<map> m_ptr);
-	
-private:	
-	std::weak_ptr<map> map_ptr;
 };
