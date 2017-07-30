@@ -49,7 +49,7 @@ void push_unloaded_chunks_in_range(
 					(chunk::position_type::coord_type)(
 				  		position.x / chunk::rows + row
 				  	),
-				  	(chunk::position_type::coord_type)(
+					(chunk::position_type::coord_type)(
 				  		position.z / chunk::columns + column
 				  	)
 				};

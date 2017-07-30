@@ -49,6 +49,8 @@ void scene::update(){
 	);
 	if(!model_loading_queue.empty()){
 		// TODO if(chunk_models.size() == max_loaded_models) unload most distant chunk model
+		// TODO closest_unleaded_model();
+		// TODO generate_c3x3();
 		auto closest_unloaded_model = *std::min_element(
 			model_loading_queue.begin(),
 			model_loading_queue.end(),
@@ -98,8 +100,8 @@ void scene::draw(sf::RenderTarget& target, sf::RenderStates states) const{
 	
 	glm::mat4 view = glm::lookAt(
 		glm::vec3(player.position.x, player.position.y, player.position.z),
-		glm::vec3(player.position.x - 3, player.position.y - 1, player.position.z),
-		glm::vec3(0, 1, 0)
+		glm::vec3(player.position.x + 1, player.position.y - 1, player.position.z),
+		glm::vec3(1, 0, 0)
 	);
 	
 	glm::mat4 model{1.0f};

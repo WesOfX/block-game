@@ -39,8 +39,8 @@ int main(){
 	player p;
 
 	c.load_bindings();
-	p.position = {8.0, 160.0f, 8.0f};
-	p.velocity = {-1.0f / 16, 0.0f, 1.0f / 64};
+	p.position = {8.0, 138.0f, 8.0f};
+	p.velocity = {1.0f / 8, 0.0f, 0.0f};
 	w.players.push_back(std::move(p));
 	
 	while(window.isOpen()){

@@ -14,6 +14,10 @@ struct chunk{
 	typedef block_position_type::coord_type block_coord_type;
 	
 	static constexpr block_coord_type rows = 16, columns = 16, layers = 128;
+	// TODO last block update
+	// TODO last light update
+	// TODO last save
+	// TODO in scene: last_remodel
 	
 	const block& get(const block_position_type& position) const;
 	void set(const block_position_type& position, const block& b);
